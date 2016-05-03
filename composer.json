@@ -1,0 +1,35 @@
+{
+  "name": "farhanwazir/laravelgooglemaps",
+  "description": "Laravel implementation of Farhan Wazir Google Maps API, originally by Michael Hopkins at Appitventures.",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "gmap",
+    "googlemaps",
+    "laravelgooglemap"
+  ],
+  "authors": [
+    {
+      "name": "Farhan Wazir",
+      "email": "seejee1@gmail.com",
+      "role": "Author"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0",
+    "laravel/framework": "5.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "FarhanWazir\\GoogleMaps\\": "src/FarhanWazir/GoogleMaps/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-laravel5": "1.0-dev",
+      "dev-develop": "2.0-dev",
+      "dev-master": "2.0-dev"
+    }
+  },
+  "minimum-stability": "stable"
+}
