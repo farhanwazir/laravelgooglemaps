@@ -20,6 +20,6 @@ Then add the service provider entry to `config/app.php`:
 
 And the Facade in the alias section (further down in `config/app.php`):
 ```php
-        'GMaps' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
+        'GoogleMap' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
 ```
 

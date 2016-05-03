@@ -31,9 +31,6 @@ class GMapsServiceProvider extends ServiceProvider
         $this->app->bind('GMaps', function ($app) {
             return new GMaps();
         });
-        /*$this->app['phpgmaps'] = $this->app->share(function ($app) {
-            return new Phpgmaps();
-        });*/
     }
 
     /**
