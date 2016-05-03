@@ -26,10 +26,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-laravel5": "1.0-dev",
-      "dev-develop": "2.0-dev",
-      "dev-master": "2.0-dev"
+      "dev-master": "1.0.x-dev"
     }
   },
-  "minimum-stability": "div-master"
+  "minimum-stability": "dev"
 }
