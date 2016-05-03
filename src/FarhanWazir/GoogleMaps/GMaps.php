@@ -6,13 +6,14 @@ class GMaps
     protected $output_js;
     protected $output_js_contents;
     protected $output_html;
+    protected $apiKey = '';
 
     public $adsense = false;                    // Whether Google Adsense For Content should be enabled
     public $adsenseChannelNumber = '';                        // The Adsense channel number for tracking the performance of this AdUnit
     public $adsenseFormat = 'HALF_BANNER';            // The format of the AdUnit
     public $adsensePosition = 'TOP_CENTER';                // The position of the AdUnit
     public $adsensePublisherID = '';                        // Your Google AdSense publisher ID
-    public $apiKey = '';                        // If you've got an API key you can use it by passing this parameter. Setup an API key here: https://code.google.com/apis/console
+
     public $backgroundColor = '';                        // A hex color value shown as the map background when tiles have not yet loaded as the user pans
     public $bicyclingOverlay = false;                    // If set to TRUE will overlay bicycling information (ie. bike paths and suggested routes) onto the map by default
     public $center = '37.4419, -122.1419';        // Sets the default center location (lat/long co-ordinate or address) of the map. If defaulting to the users location set to "auto"
@@ -149,6 +150,8 @@ class GMaps
 
     public function __construct($config = array())
     {
+        $this->apiKey = config('googlemaps.key');
+
         if (count($config) > 0) {
             $this->initialize($config);
         }
@@ -1081,7 +1084,7 @@ class GMaps
             } else {
                 $apiLocation = 'https://maps.google.com/maps/api/js?';
             }
-            $apiLocation .= 'sensor='.$this->sensor;
+            //$apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
             if ($this->region != "" && strlen($this->region) == 2) {
                 $apiLocation .= '&region='.strtoupper($this->region);
             }

@@ -1,15 +1,13 @@
 # GMaps
-This repo aims to keep farhanwazir/laravelgooglemaps alive, hopefully filling in temporarily until they make their repo
-available again, or else continuing its maintenance going forward and keeping it working with future versions of
-Laravel.
+This repo aims to fully featured use of google map in laravel 5.x
 
-Currently only Laravel 5.* is supported.
+Currently only Laravel 5.x is supported.
 
 ## Installation Changes
 Add the repo to composer.json under this new namespace:
 ```
   "require": {
-      "farhanwazir/laravelgooglemaps": "~0.5.5"
+      "farhanwazir/laravelgooglemaps": "@dev"
   }
 ```
 
@@ -20,6 +18,10 @@ Then add the service provider entry to `config/app.php`:
 
 And the Facade in the alias section (further down in `config/app.php`):
 ```php
-        'GoogleMap' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
+        'Mappy' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
 ```
 
+Now publish configuration file by
+```php
+    php artisan vendor:publish --provider="FarhanWazir\GoogleMaps\GMapsServiceProvider" --tag="config"
+```

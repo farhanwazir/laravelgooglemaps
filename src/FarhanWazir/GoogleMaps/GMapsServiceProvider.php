@@ -10,7 +10,7 @@ class GMapsServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    protected $defer = false;
 
     /**
      * Bootstrap the application events.
@@ -19,6 +19,9 @@ class GMapsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__.'/config/googlemaps.php' => config_path('googlemaps.php')
+        ], 'config');
     }
 
     /**
