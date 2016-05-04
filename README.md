@@ -36,4 +36,7 @@ Now publish configuration file
 ```
 
 ##Usage
-This will be share soon, if you need urgent help then contact at seejee1@gmail.com 
+Examples files are under src/FarhanWazir/GoogleMaps/example:
+Controller Example
+Route Example
+View Example
