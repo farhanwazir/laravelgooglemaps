@@ -148,6 +148,19 @@ class GMaps
     public $placesAutocompleteOnChange = '';                        // The JavaScript action to perform when a place is selected
     public $palcesAutoCompleteOnChangeFailed = '';
 
+    public $injectControlsInTopLeft = array();
+    public $injectControlsInTopRight = array();
+    public $injectControlsInTopCenter = array();
+    public $injectControlsInLeftTop = array();
+    public $injectControlsInLeftCenter = array();
+    public $injectControlsInLeftBottom = array();
+    public $injectControlsInRightTop = array();
+    public $injectControlsInRightCenter = array();
+    public $injectControlsInRightBottom = array();
+    public $injectControlsInBottomLeft = array();
+    public $injectControlsInBottomRight = array();
+    public $injectControlsInBottomCenter = array();
+
 
     public function __construct($config = array())
     {
@@ -1087,6 +1100,9 @@ class GMaps
                 $apiLocation = 'https://maps.google.com/maps/api/js?';
             }
             //$apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
+            if ($this->version != "") {
+                $apiLocation .= '&v='.$this->version;
+            }
             if ($this->region != "" && strlen($this->region) == 2) {
                 $apiLocation .= '&region='.strtoupper($this->region);
             }
@@ -1359,6 +1375,56 @@ class GMaps
         $this->output_js_contents .= '};';
 
         $this->output_js_contents .=$this->map_name.' = new google.maps.Map(document.getElementById("'.$this->map_div_id.'"), myOptions);';
+
+        /* Map Custom Controls */
+        foreach($this->injectControlsInTopLeft as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_LEFT].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInTopCenter as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_CENTER].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInTopRight as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_RIGHT].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInLeftTop as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_TOP].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInLeftCenter as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_CENTER].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInLeftBottom as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_BOTTOM].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInBottomLeft as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_LEFT].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInBottomCenter as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_CENTER].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInBottomRight as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInRightTop as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_TOP].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInRightCenter as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_CENTER].push('. $customControl .');';
+        }
+
+        foreach($this->injectControlsInRightBottom as $customControl){
+            $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push('. $customControl .');';
+        }
+        /* End Map Custom Controls */
 
         if ($styleOutput != "") {
             $this->output_js_contents .= $styleOutput.'
@@ -1737,6 +1803,8 @@ class GMaps
                           '. $this->map_name .'.setCenter(place.geometry.location);
                           '. $this->map_name .'.setZoom('. $this->zoom .');
                         }
+
+                        event = {latLng: place.geometry.location}
 
 						'. $this->placesAutocompleteOnChange .'
 					});
