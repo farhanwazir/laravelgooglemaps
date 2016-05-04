@@ -27,7 +27,7 @@ Add service provider `config/app.php`
 
 And finally adf in the alias section `config/app.php`
 ```php
-        'Mappy' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
+        'GMaps' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
 ```
 
 Now publish configuration file

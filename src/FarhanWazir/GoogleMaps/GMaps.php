@@ -146,6 +146,7 @@ class GMaps
     public $placesAutocompleteBoundNE = '';                        // Both South-West (lat/long co-ordinate or address) and North-East (lat/long co-ordinate or address) values are required if wishing to set bounds
     public $placesAutocompleteBoundsMap = false;                    // An alternative to setting the SW and NE bounds is to use the bounds of the current viewport. If set to TRUE, the bounds will be set to the viewport of the visible map, even if dragged or zoomed
     public $placesAutocompleteOnChange = '';                        // The JavaScript action to perform when a place is selected
+    public $palcesAutoCompleteOnChangeFailed = '';
 
 
     public function __construct($config = array())
@@ -1724,7 +1725,20 @@ class GMaps
 
                 if ($this->placesAutocompleteOnChange != "") {
                     $this->output_js_contents .= 'google.maps.event.addListener(placesAutocomplete, \'place_changed\', function() {
-						'.$this->placesAutocompleteOnChange.'
+                        var place = placesAutocomplete.getPlace();
+                        if (!place.geometry) {
+                          '. $this->palcesAutoCompleteOnChangeFailed .'
+                          return;
+                        }
+
+                        if (place.geometry.viewport) {
+                          '. $this->map_name .'.fitBounds(place.geometry.viewport);
+                        } else {
+                          '. $this->map_name .'.setCenter(place.geometry.location);
+                          '. $this->map_name .'.setZoom('. $this->zoom .');
+                        }
+
+						'. $this->placesAutocompleteOnChange .'
 					});
 					';
                 }
@@ -1733,6 +1747,7 @@ class GMaps
 
         if ($this->onboundschanged != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "bounds_changed", function(event) {
+
     			'.$this->onboundschanged.'
   			});
 			';

@@ -13,8 +13,8 @@ Route::get('/map', 'MapController@index');
 Route::get('/', function(){
     $config = array();
     $config['center'] = 'Defence Garden, Karachi';
-    Mappy::initialize($config);
-    $map = Mappy::create_map();
+    GMaps::initialize($config);
+    $map = GMaps::create_map();
 
     echo $map['js'];
     echo $map['html'];
