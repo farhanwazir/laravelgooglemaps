@@ -37,6 +37,9 @@ Now publish configuration file
 
 ##Usage
 Example files are under src/FarhanWazir/GoogleMaps/example:
+
 Controller Example
+
 Route Example
+
 View Example
