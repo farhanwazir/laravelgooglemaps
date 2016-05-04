@@ -12,14 +12,14 @@ class GMaps
     public $adsenseChannelNumber = '';                        // The Adsense channel number for tracking the performance of this AdUnit
     public $adsenseFormat = 'HALF_BANNER';            // The format of the AdUnit
     public $adsensePosition = 'TOP_CENTER';                // The position of the AdUnit
-    public $adsensePublisherID = '';                        // Your Google AdSense publisher ID
+    protected $adsensePublisherID = '';                        // Your Google AdSense publisher ID
 
     public $backgroundColor = '';                        // A hex color value shown as the map background when tiles have not yet loaded as the user pans
     public $bicyclingOverlay = false;                    // If set to TRUE will overlay bicycling information (ie. bike paths and suggested routes) onto the map by default
     public $center = '37.4419, -122.1419';        // Sets the default center location (lat/long co-ordinate or address) of the map. If defaulting to the users location set to "auto"
 
     public $class = '';                        // A class name if wishing to style the map further through CSS. Can also be useful if wanting it to be responsive etc.
-    public $cluster = false;                    // Whether to cluster markers
+    public $cluster = true;                    // Whether to cluster markers
     public $clusterGridSize = 60;                        // The grid size of a cluster in pixels
     public $clusterMaxZoom = '';                        // The maximum zoom level that a marker can be part of a cluster
     public $clusterZoomOnClick = true;                        // Whether the default behaviour of clicking on a cluster is to zoom into it
@@ -80,7 +80,7 @@ class GMaps
     public $region = '';                        // Country code top-level domain (eg "uk") within which to search. Useful if supplying addresses rather than lat/longs
     public $scaleControlPosition = '';                        // The position of the Scale control, eg. 'BOTTOM_RIGHT'
     public $scrollwheel = true;                        // If set to FALSE will disable zooming by scrolling of the mouse wheel
-    public $sensor = false;                    // Set to TRUE if being used on a device that can detect a users location
+    protected $sensor = false;                    // Set to TRUE if being used on a device that can detect a users location
     public $streetViewAddressControl = true;                        // If set to FALSE will hide the Address control
     public $streetViewAddressPosition = '';                        // The position of the Address control, eg. 'BOTTOM'
     public $streetViewControlPosition = '';                        // The position of the Street View control when viewing normal aerial map, eg. 'BOTTOM_RIGHT'
@@ -151,6 +151,8 @@ class GMaps
     public function __construct($config = array())
     {
         $this->apiKey = config('googlemaps.key');
+        $this->adsensePublisherID = config('googlemaps.adsense_publisher_id');
+        $this->class = config('googlemaps.css_class');
 
         if (count($config) > 0) {
             $this->initialize($config);
@@ -225,16 +227,15 @@ class GMaps
 
         if ($marker['position'] != "") {
             if ($this->is_lat_long($marker['position'])) {
-                $marker_output .= '
-			var myLatlng = new google.maps.LatLng('.$marker['position'].');
-			';
+                //Javascript
+                $marker_output .= 'var myLatlng = new google.maps.LatLng('.$marker['position'].');';
+
                 $explodePosition = explode(",", $marker['position']);
                 $this->markersInfo['marker_'.$marker_id]['latitude'] = trim($explodePosition[0]);
                 $this->markersInfo['marker_'.$marker_id]['longitude'] = trim($explodePosition[1]);
             } else {
                 $lat_long = $this->get_lat_long_from_address($marker['position']);
-                $marker_output .= '
-			var myLatlng = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].');';
+                $marker_output .= 'var myLatlng = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].');';
                 $this->markersInfo['marker_'.$marker_id]['latitude'] = $lat_long[0];
                 $this->markersInfo['marker_'.$marker_id]['longitude'] = $lat_long[1];
             }
