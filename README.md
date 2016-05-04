@@ -36,7 +36,7 @@ Now publish configuration file
 ```
 
 ##Usage
-Examples files are under src/FarhanWazir/GoogleMaps/example:
+Example files are under src/FarhanWazir/GoogleMaps/example:
 Controller Example
 Route Example
 View Example
