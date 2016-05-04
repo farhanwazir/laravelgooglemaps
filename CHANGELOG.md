@@ -1,10 +1,10 @@
 # Change Log
 
-## 0.0.1 - 0.5.5: 03 May 2016
+## 1.2.5 - 1.5.0: 03 May 2016
 ### Added
-- License
-- Change Log
+- Examples create
+- Configuration
 
 ### Changed
-- Namespace from Appitventures to FarhanWazir.
-- Installation instructions, affected areas of README.
+- Class modifications
+- Installation instructions and usage ReadMe.
