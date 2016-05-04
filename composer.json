@@ -1,12 +1,14 @@
 {
   "name": "farhanwazir/laravelgooglemaps",
-  "description": "Laravel implementation of Farhan Wazir Google Maps API, originally by Michael Hopkins at Appitventures.",
+  "description": "Laravel Google Map package for 5.x. You can use all google map features in laravel.",
   "license": "MIT",
   "keywords": [
     "laravel",
     "gmap",
-    "googlemaps",
-    "laravelgooglemap"
+    "map",
+    "google",
+    "googlemap",
+    "gmap"
   ],
   "authors": [
     {

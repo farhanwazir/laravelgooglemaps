@@ -1,5 +1,6 @@
-# GMaps
-[![PHPPackages Rank](http://phppackages.org/p/farhanwazir/laravelgooglemaps/badge/rank.svg)](http://phppackages.org/p/farhanwazir/laravelgooglemaps)
+# Laravel Google Maps
+[!http://phppackages.org/p/farhanwazir/laravelgooglemaps/badge/rank.svg](http://phppackages.org/p/farhanwazir/laravelgooglemaps)
+
 This repo aims to fully featured google map in laravel 5.x
 
 Currently only Laravel 5.x is supported.
