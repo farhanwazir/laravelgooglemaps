@@ -38,7 +38,7 @@ Currently only Laravel 5.x is supported.
 Add in composer.json
 ```
   "require": {
-      "farhanwazir/laravelgooglemaps": "@dev"
+      "farhanwazir/laravelgooglemaps": "^1.5"
       ----
   }
 ```
@@ -48,7 +48,7 @@ Then
 ```
 Or install via composer cli
 ```
-  composer require farhanwazir/laravelgooglemaps:@dev
+  composer require farhanwazir/laravelgooglemaps
 ```
 
 Add service provider `config/app.php`
