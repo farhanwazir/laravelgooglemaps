@@ -1,10 +1,9 @@
 # Laravel Google Maps
 [![PHPPackages Rank](https://phppackages.org/p/farhanwazir/laravelgooglemaps/badge/rank.svg)](http://phppackages.org/p/farhanwazir/laravelgooglemaps)
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+[![Total Downloads](https://poser.pugx.org/farhanwazir/laravelgooglemaps/d/total.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
+[![Latest Stable Version](https://poser.pugx.org/farhanwazir/laravelgooglemaps/v/stable.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
+[![Latest Unstable Version](https://poser.pugx.org/farhanwazir/laravelgooglemaps/v/unstable.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
+[![License](https://poser.pugx.org/farhanwazir/laravelgooglemaps/license.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
 
 This repo aims to fully featured google map in laravel 5.x
 
