@@ -52,7 +52,7 @@ class MapController extends Controller
 
         $config = array();
         $config['map_height'] = "100%";
-        $config['center'] = 'Defence Garden, Karachi';
+        $config['center'] = 'Clifton, Karachi';
         $config['onboundschanged'] = 'if (!centreGot) {
             var mapCentre = map.getCenter();
             marker_0.setOptions({
@@ -66,6 +66,15 @@ class MapController extends Controller
         // set up the marker ready for positioning
         $marker = array();
         $marker['draggable'] = true;
+        $marker['ondragend'] = '
+        iw_'. $this->gmap->map_name .'.close();
+        reverseGeocode(event.latLng, function(status, result, mark){
+            if(status == 200){
+                iw_'. $this->gmap->map_name .'.setContent(result);
+                iw_'. $this->gmap->map_name .'.open('. $this->gmap->map_name .', mark);
+            }
+        }, this);
+        ';
         $this->gmap->add_marker($marker);
 
         $map = $this->gmap->create_map(); // This object will render javascript files and map view; you can call JS by $map['js'] and map view by $map['html']

@@ -2230,17 +2230,17 @@ class GMaps
         //If return object, error in query and error bag return in object
         //If string will return, result OK
         $this->output_js_contents .= '
-        function reverseGeocode(latitude, longitude) {
-          var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        function reverseGeocode(latlng, callback, obj) { //callback must be function
+          //var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
           geocoder.geocode({\'location\': latlng}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
               if (results[1]) {
-                return results[1].formatted_address;
+                callback(200, results[1].formatted_address, obj );
               } else {
-                return false;
+                callback(404, "Not found.", obj);
               }
             } else {
-              return {error: true, message: status};
+              callback(400, "Something wrong went.", obj );
             }
           });
         }
