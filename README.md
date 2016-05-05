@@ -40,7 +40,7 @@ Currently only Laravel 5.x is supported.
 Add in composer.json
 ```
   "require": {
-      "farhanwazir/laravelgooglemaps": "^1.5"
+      "farhanwazir/laravelgooglemaps": "^1.8"
       ----
   }
 ```
