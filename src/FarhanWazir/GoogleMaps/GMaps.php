@@ -1150,6 +1150,7 @@ class GMaps
 			var lat_longs_'.$this->map_name.' = new Array();
 			var markers_'.$this->map_name.' = new Array();
             var iw_'.$this->map_name.';
+            var geocoder; // Global declaration of geocoder for reverser location from latLng
 			';
         if ($this->cluster) {
             $this->output_js_contents .= 'var markerCluster;
@@ -1425,6 +1426,11 @@ class GMaps
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push('. $customControl .');';
         }
         /* End Map Custom Controls */
+
+        /* Reverse Geocoding */
+        $this->output_js_contents .= 'geocoder = new google.maps.Geocoder;';
+
+        /* End reverse Geocoding */
 
         if ($styleOutput != "") {
             $this->output_js_contents .= $styleOutput.'
@@ -1905,6 +1911,8 @@ class GMaps
 			';
         }
 
+
+
         // add markers
         if (count($this->markers)) {
             foreach ($this->markers as $marker) {
@@ -2216,6 +2224,28 @@ class GMaps
 			google.maps.event.addDomListener(window, "load", initialize_'.$this->map_name.');
 			';
         }
+
+        /* Geocoding reverse method */
+        //If return false, no result found.
+        //If return object, error in query and error bag return in object
+        //If string will return, result OK
+        $this->output_js_contents .= '
+        function reverseGeocode(latitude, longitude) {
+          var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+          geocoder.geocode({\'location\': latlng}, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+              if (results[1]) {
+                return results[1].formatted_address;
+              } else {
+                return false;
+              }
+            } else {
+              return {error: true, message: status};
+            }
+          });
+        }
+        ';
+        /* End geocoding reverse method */
 
         // Minify the Javascript if the $minifyJS config value is true. Requires Jsmin.php and PHP 5+
         if ($this->minifyJS) {

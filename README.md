@@ -24,6 +24,8 @@ Currently only Laravel 5.x is supported.
     12. Controls
     13. Street View
     14. Events
+    15. Reverse Geocoding
+    16. Travel Moding
 
 ### Services & Libraries
     1. Directions
