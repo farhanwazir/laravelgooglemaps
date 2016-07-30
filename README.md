@@ -35,6 +35,7 @@ Currently only Laravel 5.x is supported.
     5. Places
     6. Autocomplete
     7. Adsense
+    8. Geofence (For now only server side geofence available)
 
 ## Installation
 Add in composer.json
@@ -65,11 +66,11 @@ And finally adf in the alias section `config/app.php`
 
 Now publish configuration file
 ```php
-    php artisan vendor:publish --provider="FarhanWazir\GoogleMaps\GMapsServiceProvider" --tag="config"
+    php artisan vendor:publish --provider="FarhanWazir\GoogleMaps\GMapsServiceProvider"
 ```
 
 ##Usage
-Example files are under src/FarhanWazir/GoogleMaps/example:
+Example files are under FarhanWazir/GoogleMaps/Example:
 
 Controller Example; reference code for display method
 ```php

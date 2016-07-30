@@ -20,8 +20,12 @@ class GMapsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/googlemaps.php' => config_path('googlemaps.php')
+            __DIR__.'/Publishes/config/googlemaps.php' => config_path('googlemaps.php')
         ], 'config');
+
+        $this->publishes([
+            __DIR__.'/Publishes/database/migrations/' => database_path('migrations')
+        ], 'migrations');
     }
 
     /**
@@ -34,6 +38,7 @@ class GMapsServiceProvider extends ServiceProvider
         $this->app->bind('GMaps', function ($app) {
             return new GMaps();
         });
+
     }
 
     /**

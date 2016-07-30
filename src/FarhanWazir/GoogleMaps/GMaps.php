@@ -1,5 +1,8 @@
 <?php namespace FarhanWazir\GoogleMaps;
 
+use FarhanWazir\GoogleMaps\Containers\isInsidePolygon;
+use Illuminate\Support\Facades\DB;
+
 class GMaps
 {
 
@@ -36,6 +39,7 @@ class GMaps
     public $draggableCursor = '';                        // The name or url of the cursor to display on a draggable object
     public $draggingCursor = '';                        // The name or url of the cursor to display when an object is being dragged
     public $geocodeCaching = false;                    // If set to TRUE will cache any geocode requests made when an address is used instead of a lat/long. Requires DB table to be created (see documentation)
+    public $geoCacheTableName = 'gmaps_geocache';   //Geo cache database table name
     public $https = false;                    // If set to TRUE will load the Google Maps JavaScript API over HTTPS, allowing you to utilize the API within your HTTPS secure application
     public $navigationControlPosition = '';                        // The position of the Navigation control, eg. 'BOTTOM_RIGHT'
     public $infowindowMaxWidth = 0;                        // The maximum width of the infowindow in pixels. Expecting an integer without units
@@ -2314,17 +2318,11 @@ class GMaps
 
         if ($this->geocodeCaching) { // if caching of geocode requests is activated
 
-            $CI = & get_instance();
-            $CI->load->database();
-            $CI->db->select("latitude,longitude");
-            $CI->db->from("geocoding");
-            $CI->db->where("address", trim(strtolower($address)));
-            $query = $CI->db->get();
+            $geocache = DB::table($this->geoCacheTableName)->select("latitude","longitude")->where("address", trim(strtolower($address)))->first();
 
-            if ($query->num_rows() > 0) {
-                $row = $query->row();
+            if ($geocache) {
 
-                return array($row->latitude, $row->longitude);
+                return array($geocache->latitude, $geocache->longitude);
             }
         }
 
@@ -2347,7 +2345,7 @@ class GMaps
                         "latitude" => $lat,
                         "longitude" => $lng,
                     );
-                    $CI->db->insert("geocoding", $data);
+                    DB::table($this->geoCacheTableName)->insert($data);
                 }
             }
         } else {
@@ -2362,5 +2360,16 @@ class GMaps
         }
 
         return array($lat, $lng, $error);
+    }
+
+
+    /**
+     * This method will check markers are inside geofence or not
+     * @param $polygon array() -- polygon first and last value of array should be same otherwise result will be accurate
+     * @param $latlng  array()
+     */
+    public function isMarkerInsideGeofence($polygon, $latlng){
+        $cls = new isInsidePolygon();
+        return $cls->pointInPolygon($latlng, $polygon);
     }
 }
