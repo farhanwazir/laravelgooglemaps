@@ -71,11 +71,12 @@ class isInsidePolygon {
                 return true;
             }
         }
-
     }
 
     function pointStringToCoordinates($pointString) {
-        $coordinates = explode(" ", $pointString);
+        if(strpos($pointString, ", ") !== false) $coordinates = explode(", ", $pointString);
+        elseif(strpos($pointString, ",") !== false) $coordinates = explode(", ", $pointString);
+        else $coordinates = explode(" ", $pointString);
         return array("x" => $coordinates[0], "y" => $coordinates[1]);
     }
 

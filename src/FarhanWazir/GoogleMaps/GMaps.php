@@ -2366,10 +2366,20 @@ class GMaps
     /**
      * This method will check markers are inside geofence or not
      * @param $polygon array() -- polygon first and last value of array should be same otherwise result will be accurate
-     * @param $latlng  array()
+     * @param $latlngs  array()
+     *
+     * return @array
+     *
+     * EXAMPLE:::
+     * $latlngs = array("50,70","70,40","-20,30","100,10","-10,-10","40,-20","110,-20");
+     * $polygon = array("-50,30","50,70","100,50","80,10","110,-10","110,-30","-20,-50","-30,-40","10,-10","-10,10","-30,-20","-50,30");
      */
-    public function isMarkerInsideGeofence($polygon, $latlng){
+    public function isMarkerInsideGeofence($polygon, $latlngs){
         $cls = new isInsidePolygon();
-        return $cls->pointInPolygon($latlng, $polygon);
+        $output = [];
+        foreach($latlngs as $key => $point) {
+           $output[$key] = $cls->pointInPolygon($point, $polygon);
+        }
+        return $output;
     }
 }

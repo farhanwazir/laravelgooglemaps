@@ -199,3 +199,17 @@ View Example
 </body>
 </html>
 ```
+
+### Geo-fence Example
+```html
+$polygon = array("25.774,-80.190", "18.466,-66.118", "32.321,-64.757", "25.774,-80.190"); //start and end point should be same
+$latlngs = array("-12.043333,-77.028333", "-12.043333,-77.028333");
+
+GMaps::isMarkerInsideGeofence($polygon, $latlngs); //both parameters should be in array
+//return will also in array with boolean values like: array(true, false)
+```
+
+# Thank you for using!
+If you like it then click Fork!
+
+Contact me if any query or suggestion you have in support section.
