@@ -9,7 +9,7 @@
 - Class modifications
 - Installation instructions and usage ReadMe.
 
-## 1.8.x - 2.0.x: 31 July 2016
+## 1.8.x - 2.1.1: 31 July 2016
 ### Added
 - Geofence
 - Database
@@ -17,3 +17,4 @@
 ### Changed
 - Added Geofence for server side check
 - Geo cache fixed
+- Added usage of geo-fence
