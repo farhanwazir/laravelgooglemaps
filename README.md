@@ -216,4 +216,5 @@ Contact me if any query or suggestion you have in support section.
 
 ## Credits
 Library initiative: **BioStall**
-BioStall developed library for codeigniter which you can found at http://biostall.com/laravel-google-maps-v3-api-package/
+
+BioStall developed library for codeigniter originally, which you can found at http://biostall.com/laravel-google-maps-v3-api-package/
