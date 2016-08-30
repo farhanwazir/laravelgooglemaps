@@ -59,7 +59,7 @@ Add service provider `config/app.php`
         FarhanWazir\GoogleMaps\GMapsServiceProvider::class,
 ```
 
-And finally adf in the alias section `config/app.php`
+And finally add in the alias section `config/app.php`
 ```php
         'GMaps' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
 ```
