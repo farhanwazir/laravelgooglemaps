@@ -219,4 +219,4 @@ Library initiative: **BioStall**
 
 BioStall developed library for codeigniter originally, which you can found at http://biostall.com/laravel-google-maps-v3-api-package/
 
-Conversion into Laravel from codeigniter by: **GeneaLabs** -- https://github.com/GeneaLabs/Phpgmaps (But it is incomplete)
+Conversion into Laravel from codeigniter by: **GeneaLabs** -- https://github.com/GeneaLabs/Phpgmaps (but it is incomplete)
