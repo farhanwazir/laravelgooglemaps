@@ -7,7 +7,6 @@
 
 This repo aims to use google map features in laravel 5.x. It is easy to use and flexible, you can just install this package and enjoy google map in your website and/or applications.
 
-Currently only Laravel 5.x is supported.
 
 ## Features
     1. Localizing
