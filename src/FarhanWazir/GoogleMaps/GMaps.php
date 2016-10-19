@@ -22,7 +22,7 @@ class GMaps
     public $center = '37.4419, -122.1419';        // Sets the default center location (lat/long co-ordinate or address) of the map. If defaulting to the users location set to "auto"
 
     public $class = '';                        // A class name if wishing to style the map further through CSS. Can also be useful if wanting it to be responsive etc.
-    public $cluster = true;                    // Whether to cluster markers
+    public $cluster = false;                    // Whether to cluster markers
     public $clusterGridSize = 60;                        // The grid size of a cluster in pixels
     public $clusterMaxZoom = '';                        // The maximum zoom level that a marker can be part of a cluster
     public $clusterZoomOnClick = true;                        // Whether the default behaviour of clicking on a cluster is to zoom into it
@@ -1099,7 +1099,7 @@ class GMaps
 
         if ($this->maps_loaded == 0) {
             if ($this->apiKey != "") {
-                $apiLocation = 'https://maps.googleapis.com/maps/api/js?key='.$this->apiKey.'&';
+                $apiLocation = 'https://maps.googleapis.com/maps/api/js?key='.$this->apiKey;
             } else {
                 $apiLocation = 'https://maps.google.com/maps/api/js?';
             }
@@ -1132,13 +1132,14 @@ class GMaps
 
             if (!$this->loadAsynchronously) {
                 $this->output_js .= '
+
 				<script type="text/javascript" src="'.$apiLocation.'"></script>';
             }
 
             if ($this->cluster) {
                 $this->output_js .= '
 
-			<script type="text/javascript" src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script >
+			<script type="text/javascript" src="'.asset('libs/FarhanWazir/GMaps/markerclusterer.js').'"></script >
 					';
             }
         }
@@ -2381,5 +2382,9 @@ class GMaps
            $output[$key] = $cls->pointInPolygon($point, $polygon);
         }
         return $output;
+    }
+
+    public function getMapName(){
+        return $this->map_name;
     }
 }

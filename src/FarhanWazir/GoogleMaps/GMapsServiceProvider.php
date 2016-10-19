@@ -26,6 +26,10 @@ class GMapsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Publishes/database/migrations/' => database_path('migrations')
         ], 'migrations');
+
+        $this->publishes([
+            __DIR__.'/Publishes/public/libs/' => public_path('libs')
+        ], 'public');
     }
 
     /**

@@ -65,7 +65,7 @@ class isInsidePolygon {
         return false; //return "outside"; //point is outside
     }
 
-    function pointOnVertex($point, $vertices) {
+    private function pointOnVertex($point, $vertices) {
         foreach($vertices as $vertex) {
             if ($point == $vertex) {
                 return true;
@@ -73,7 +73,7 @@ class isInsidePolygon {
         }
     }
 
-    function pointStringToCoordinates($pointString) {
+    private function pointStringToCoordinates($pointString) {
         if(strpos($pointString, ", ") !== false) $coordinates = explode(", ", $pointString);
         elseif(strpos($pointString, ",") !== false) $coordinates = explode(", ", $pointString);
         else $coordinates = explode(" ", $pointString);
