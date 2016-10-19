@@ -1139,11 +1139,7 @@ class GMaps
             if ($this->cluster) {
                 $this->output_js .= '
 
-<<<<<<< HEAD
 			<script type="text/javascript" src="'.asset('libs/FarhanWazir/GMaps/markerclusterer.js').'"></script >
-=======
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-marker-clusterer/1.0.0/markerclusterer.js"></script >
->>>>>>> origin/master
 					';
             }
         }
