@@ -5,9 +5,8 @@
 [![Latest Unstable Version](https://poser.pugx.org/farhanwazir/laravelgooglemaps/v/unstable.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
 [![License](https://poser.pugx.org/farhanwazir/laravelgooglemaps/license.svg)](https://packagist.org/packages/farhanwazir/laravelgooglemaps)
 
-This repo aims to fully featured google map in laravel 5.x
+This repo aims to use google map features in laravel 5.x. It is easy to use and flexible, you can just install this package and enjoy google map in your website and/or applications.
 
-Currently only Laravel 5.x is supported.
 
 ## Features
     1. Localizing
@@ -59,7 +58,7 @@ Add service provider `config/app.php`
         FarhanWazir\GoogleMaps\GMapsServiceProvider::class,
 ```
 
-And finally adf in the alias section `config/app.php`
+And finally add in the alias section `config/app.php`
 ```php
         'GMaps' => FarhanWazir\GoogleMaps\Facades\GMapsFacade::class,
 ```
@@ -213,3 +212,10 @@ GMaps::isMarkerInsideGeofence($polygon, $latlngs); //both parameters should be i
 If you like it then click Fork!
 
 Contact me if any query or suggestion you have in support section.
+
+# Credits
+Library initiative: **BioStall**
+
+BioStall developed library for codeigniter originally, which you can found at http://biostall.com/laravel-google-maps-v3-api-package/
+
+Conversion into Laravel from codeigniter by: **GeneaLabs** -- https://github.com/GeneaLabs/Phpgmaps (but it is incomplete)

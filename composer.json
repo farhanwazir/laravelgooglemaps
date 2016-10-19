@@ -28,7 +28,11 @@
   },
   "extra": {
     "branch-alias": {
+<<<<<<< HEAD
       "dev-master": "2.3.x-dev"
+=======
+      "dev-master": "2.2.x-dev"
+>>>>>>> origin/master
     }
   },
   "minimum-stability": "stable"
