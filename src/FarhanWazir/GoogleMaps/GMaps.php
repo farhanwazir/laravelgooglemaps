@@ -71,6 +71,7 @@ class GMaps
     public $ondragstart = '';                        // The JavaScript action to perform when the user starts dragging the map
     public $onidle = '';                        // The JavaScript action to perform when the map becomes idle after panning or zooming
     public $onload = '';                        // The JavaScript action to perform when the map first loads. This library hi-jacks the window.load event so add any bespoke code using this option
+    public $onstaged = '';
     public $onmousemove = '';                        // The JavaScript action to perform when the user's mouse moves over the map container
     public $onmouseout = '';                        // The JavaScript action to perform when the user's mouse exits the map container
     public $onmouseover = '';                        // The JavaScript action to perform when the user's mouse enters the map container
@@ -164,6 +165,9 @@ class GMaps
     public $injectControlsInBottomLeft = array();
     public $injectControlsInBottomRight = array();
     public $injectControlsInBottomCenter = array();
+
+    //user callbacks
+    public $init_call_func = '';
 
 
     public function __construct($config = array())
@@ -345,6 +349,7 @@ class GMaps
         $marker_output .= '
 			};
 			marker_'.$marker_id.' = createMarker_'.$this->map_name.'(markerOptions);
+			marker_'.$marker_id.'.id = marker_'.$marker_id.';
 			';
 
         if ($marker['infowindow_content'] != "") {
@@ -415,7 +420,7 @@ class GMaps
         if ($marker['onpositionchanged'] != "") {
             $marker_output .= '
 			google.maps.event.addListener(marker_'.$marker_id.', "position_changed", function(event) {
-				'.$marker['onpositionchanged'].'
+				'.$marker['onpositionchanged'].'(event, this);
 			});
 			';
         }
@@ -1432,6 +1437,14 @@ class GMaps
         }
         /* End Map Custom Controls */
 
+        /* map on staged event */
+        if($this->onstaged != ''){
+            $this->output_js_contents .= '
+            //user callback
+                onstaged_'. $this->map_name .'();
+            ';
+        }
+
         /* Reverse Geocoding */
         $this->output_js_contents .= 'geocoder = new google.maps.Geocoder;';
 
@@ -2090,10 +2103,19 @@ class GMaps
         }
 
         $this->output_js_contents .= '
-
 			}
 
 		';
+
+        /* onStaged map */
+        $this->output_js_contents .= '
+        function onstaged_'. $this->map_name .'(){';
+
+        if($this->onstaged != '')
+            $this->output_js_contents .= $this->onstaged.'();';
+
+        $this->output_js_contents .= '}
+        ';
 
         // add markers
         $this->output_js_contents .= '
@@ -2379,7 +2401,7 @@ class GMaps
         $cls = new isInsidePolygon();
         $output = [];
         foreach($latlngs as $key => $point) {
-           $output[$key] = $cls->pointInPolygon($point, $polygon);
+            $output[$key] = $cls->pointInPolygon($point, $polygon);
         }
         return $output;
     }
