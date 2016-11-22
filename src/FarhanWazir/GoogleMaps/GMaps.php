@@ -2353,7 +2353,19 @@ class GMaps
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
-        $data = file_get_contents($data_location);
+
+        $context = null;
+        $proxy = config('googlemaps.http_proxy');
+        if (!empty($proxy)) {
+            $context = stream_context_create([
+                'http' => [
+                    'proxy' => $proxy,
+                    'request_fulluri' => true,
+                ]
+            ]);
+        }
+
+        $data = file_get_contents($data_location, false, $context);
 
         $data = json_decode($data);
 
