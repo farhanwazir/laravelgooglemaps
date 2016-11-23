@@ -1104,11 +1104,11 @@ class GMaps
 
         if ($this->maps_loaded == 0) {
             if ($this->apiKey != "") {
-                $apiLocation = 'https://maps.googleapis.com/maps/api/js?key='.$this->apiKey;
+                $apiLocation = 'http://maps.googleapis.com/maps/api/js?key='.$this->apiKey.'&sensor='.$this->sensor;
             } else {
-                $apiLocation = 'https://maps.google.com/maps/api/js?';
+                $apiLocation = 'http://maps.google.com/maps/api/js?sensor='.$this->sensor;
             }
-            //$apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
+            $apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
             if ($this->version != "") {
                 $apiLocation .= '&v='.$this->version;
             }
@@ -1195,7 +1195,7 @@ class GMaps
 			';
         }
 
-        $this->output_js_contents .= '
+        /*$this->output_js_contents .= '
 			iw_'.$this->map_name.' = new google.maps.InfoWindow(';
         if ($this->infowindowMaxWidth != 0) {
             $this->output_js_contents .= '{
@@ -1204,7 +1204,7 @@ class GMaps
         }
         $this->output_js_contents .= ');
 
-				 ';
+				 ';*/
 
         $this->output_js_contents .= 'function initialize_'.$this->map_name.'() {
 
@@ -1238,6 +1238,17 @@ class GMaps
                 $this->output_js_contents .= 'var myLatlng = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].');';
             }
         }
+
+        $this->output_js_contents .= '
+			iw_'.$this->map_name.' = new google.maps.InfoWindow(';
+        if ($this->infowindowMaxWidth != 0) {
+            $this->output_js_contents .= '{
+				maxWidth: '.$this->infowindowMaxWidth.'
+			}';
+        }
+        $this->output_js_contents .= ');
+
+				 ';
 
         $this->output_js_contents .= '
 				var myOptions = {
