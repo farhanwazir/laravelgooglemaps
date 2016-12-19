@@ -20,4 +20,6 @@ return [
     ],
 
     'css_class' => '', //Your custom css class
+
+    'http_proxy' => env('HTTP_PROXY', null), // Proxy host and port
 ];
