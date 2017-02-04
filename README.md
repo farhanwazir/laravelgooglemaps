@@ -25,6 +25,7 @@ This repo aims to use google map features in laravel 5.x. It is easy to use and 
     14. Events
     15. Reverse Geocoding
     16. Travel Moding
+    17. Proxy
 
 ### Services & Libraries
     1. Directions
@@ -207,6 +208,9 @@ $latlngs = array("-12.043333,-77.028333", "-12.043333,-77.028333");
 GMaps::isMarkerInsideGeofence($polygon, $latlngs); //both parameters should be in array
 //return will also in array with boolean values like: array(true, false)
 ```
+
+# Contribution
+Proxy feature by @grimseer - Nov 22, 2016
 
 # Thank you for using!
 If you like it then click Fork!
