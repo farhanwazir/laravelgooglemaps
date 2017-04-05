@@ -1102,11 +1102,16 @@ class GMaps
         $this->output_js_contents = '';
         $this->output_html = '';
 
+        $host = 'https';
+        if(empty($_SERVER['HTTPS'])){
+            $host = 'http';
+        }
+
         if ($this->maps_loaded == 0) {
             if ($this->apiKey != "") {
-                $apiLocation = 'http://maps.googleapis.com/maps/api/js?key='.$this->apiKey.'&sensor='.$this->sensor;
+                $apiLocation = $host.'://maps.googleapis.com/maps/api/js?key='.$this->apiKey.'&sensor='.$this->sensor;
             } else {
-                $apiLocation = 'http://maps.google.com/maps/api/js?sensor='.$this->sensor;
+                $apiLocation = $host.'://maps.google.com/maps/api/js?sensor='.$this->sensor;
             }
             $apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
             if ($this->version != "") {
