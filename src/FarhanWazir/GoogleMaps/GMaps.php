@@ -1102,13 +1102,18 @@ class GMaps
         $this->output_js_contents = '';
         $this->output_html = '';
 
+        $host = 'https';
+        if(empty($_SERVER['HTTPS'])){
+            $host = 'http';
+        }
+
         if ($this->maps_loaded == 0) {
             if ($this->apiKey != "") {
-                $apiLocation = 'https://maps.googleapis.com/maps/api/js?key='.$this->apiKey;
+                $apiLocation = $host.'://maps.googleapis.com/maps/api/js?key='.$this->apiKey.'&sensor='.$this->sensor;
             } else {
-                $apiLocation = 'https://maps.google.com/maps/api/js?';
+                $apiLocation = $host.'://maps.google.com/maps/api/js?sensor='.$this->sensor;
             }
-            //$apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
+            $apiLocation .= 'sensor='.$this->sensor; //Sensor feature depreciated by google API V3
             if ($this->version != "") {
                 $apiLocation .= '&v='.$this->version;
             }
@@ -2364,7 +2369,19 @@ class GMaps
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
-        $data = file_get_contents($data_location);
+
+        $context = null;
+        $proxy = config('googlemaps.http_proxy');
+        if (!empty($proxy)) {
+            $context = stream_context_create([
+                'http' => [
+                    'proxy' => $proxy,
+                    'request_fulluri' => true,
+                ]
+            ]);
+        }
+
+        $data = file_get_contents($data_location, false, $context);
 
         $data = json_decode($data);
 
