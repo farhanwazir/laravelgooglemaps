@@ -210,8 +210,8 @@ GMaps::isMarkerInsideGeofence($polygon, $latlngs); //both parameters should be i
 ```
 
 # Contribution
-Proxy feature by @grimseer - Nov 22, 2016
-Fixed to load google api via https by @wissamdagher - Apr 04, 2017
+- Proxy feature by @grimseer - Nov 22, 2016
+- Fixed to load google api via https by @wissamdagher - Apr 04, 2017
 
 
 # Thank you for using!
