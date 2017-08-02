@@ -1,4 +1,4 @@
-<?php namespace FarhanWazir\GoogleMaps\Facade;
+<?php namespace FarhanWazir\GoogleMaps\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
