@@ -23,8 +23,9 @@ class GMapsServiceProvider extends ServiceProvider
             __DIR__.'/Publishes/config/googlemaps.php' => config_path('googlemaps.php')
         ], 'config');
 
+        $timestamp = date('Y_m_d_His', time());
         $this->publishes([
-            __DIR__.'/Publishes/database/migrations/' => database_path('migrations')
+            __DIR__.'/Publishes/database/migrations/create_gmaps_geocache_table.php' => database_path('migrations') . '/' . $timestamp . '_create_gmaps_geocache_table.php'
         ], 'migrations');
 
         $this->publishes([
