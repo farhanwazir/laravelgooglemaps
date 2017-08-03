@@ -213,6 +213,8 @@ GMaps::isMarkerInsideGeofence($polygon, $latlngs); //both parameters should be i
 - Proxy feature by @grimseer - Nov 22, 2016
 - Fixed to load google api via https by @wissamdagher - Apr 04, 2017
 - Map full screen support by @wissamdagher - Jul 02, 2017
+- Facade namespace fixed by @drehimself - Aug 03, 2017
+- Fixed migration file name by @drehimself - Aug 03, 2017
 
 
 # Thank you for using!
