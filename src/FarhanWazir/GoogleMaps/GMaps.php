@@ -2364,7 +2364,7 @@ class GMaps
                 return array($geocache->latitude, $geocache->longitude);
             }
         }
-        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor."&key=".$this->apikey;
+        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor."&key=".$this->apiKey;
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
