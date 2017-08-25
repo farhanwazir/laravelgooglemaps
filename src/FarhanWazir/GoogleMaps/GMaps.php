@@ -12,6 +12,7 @@ class GMaps
     protected $apiKey = '';
 
     public $adsense = false;                    // Whether Google Adsense For Content should be enabled
+    public $geometry = true;                    // Whether Geometry should be enabled
     public $adsenseChannelNumber = '';                        // The Adsense channel number for tracking the performance of this AdUnit
     public $adsenseFormat = 'HALF_BANNER';            // The format of the AdUnit
     public $adsensePosition = 'TOP_CENTER';                // The position of the AdUnit
@@ -20,7 +21,6 @@ class GMaps
     public $backgroundColor = '';                        // A hex color value shown as the map background when tiles have not yet loaded as the user pans
     public $bicyclingOverlay = false;                    // If set to TRUE will overlay bicycling information (ie. bike paths and suggested routes) onto the map by default
     public $center = '37.4419, -122.1419';        // Sets the default center location (lat/long co-ordinate or address) of the map. If defaulting to the users location set to "auto"
-
     public $class = '';                        // A class name if wishing to style the map further through CSS. Can also be useful if wanting it to be responsive etc.
     public $cluster = false;                    // Whether to cluster markers
     public $clusterGridSize = 60;                        // The grid size of a cluster in pixels
@@ -28,13 +28,14 @@ class GMaps
     public $clusterZoomOnClick = true;                        // Whether the default behaviour of clicking on a cluster is to zoom into it
     public $clusterAverageCenter = false;                    // Whether the center of each cluster should be the average of all markers in the cluster
     public $clusterMinimumClusterSize = 2;                        // The minimum number of markers to be in a cluster before the markers are hidden and a count is shown
-    public $clusterStyles = []; 				// (object) An array that has style properties: *  'url': (string) The image url. *  'height': (number) The image height. *  'width': (number) The image width. *  'anchor': (Array) The anchor position of the label text. *  'textColor': (string) The text color. *  'textSize': (number) The text size. *  'backgroundPosition': (string) The position of the backgound x, y.
+    public $clusterStyles = [];                 // (object) An array that has style properties: *  'url': (string) The image url. *  'height': (number) The image height. *  'width': (number) The image width. *  'anchor': (Array) The anchor position of the label text. *  'textColor': (string) The text color. *  'textSize': (number) The text size. *  'backgroundPosition': (string) The position of the backgound x, y.
     public $disableDefaultUI = false;                    // If set to TRUE will hide the default controls (ie. zoom, scale etc)
     public $disableDoubleClickZoom = false;                    // If set to TRUE will disable zooming when a double click occurs
     public $disableMapTypeControl = false;                    // If set to TRUE will hide the MapType control (ie. Map, Satellite, Hybrid, Terrain)
     public $disableNavigationControl = false;                    // If set to TRUE will hide the Navigation control (ie. zoom in/out, pan)
     public $disableScaleControl = false;                    // If set to TRUE will hide the Scale control
     public $disableStreetViewControl = false;                    // If set to TRUE will hide the Street View control
+    public $enableFullScreenControl = false;                    // If set to TRUE will enable full screen control
     public $draggable = true;                        // If set to FALSE will prevent the map from being dragged around
     public $draggableCursor = '';                        // The name or url of the cursor to display on a draggable object
     public $draggingCursor = '';                        // The name or url of the cursor to display when an object is being dragged
@@ -265,92 +266,92 @@ class GMaps
 
         if ($marker['icon'] != "") {
             $marker_output .= '
-				var marker_icon = {
-					url: "'.$marker['icon'].'"';
+                var marker_icon = {
+                    url: "'.$marker['icon'].'"';
             if ($marker['icon_size'] != "") {
                 $marker_output .= ',
-					size: new google.maps.Size('.$marker['icon_size'].')';
+                    size: new google.maps.Size('.$marker['icon_size'].')';
             }
             if ($marker['icon_scaledSize'] != "") {
                 $marker_output .= ',
-					scaledSize: new google.maps.Size('.$marker['icon_scaledSize'].')';
+                    scaledSize: new google.maps.Size('.$marker['icon_scaledSize'].')';
             }
             if ($marker['icon_origin'] != "") {
                 $marker_output .= ',
-					origin: new google.maps.Point('.$marker['icon_origin'].')';
+                    origin: new google.maps.Point('.$marker['icon_origin'].')';
             }
             if ($marker['icon_anchor'] != "") {
                 $marker_output .= ',
-					anchor: new google.maps.Point('.$marker['icon_anchor'].')';
+                    anchor: new google.maps.Point('.$marker['icon_anchor'].')';
             }
             $marker_output .= '};
-			';
+            ';
         }
 
         $marker_output .= '
-			var markerOptions = {
-				map: '.$this->map_name;
+            var markerOptions = {
+                map: '.$this->map_name;
         if ($marker['position'] != "") {
             $marker_output .= ',
-				position: myLatlng';
+                position: myLatlng';
         }
         if (!$marker['clickable']) {
             $marker_output .= ',
-				clickable: false';
+                clickable: false';
         }
         if ($marker['cursor'] != "") {
             $marker_output .= ',
-				cursor: "'.$marker['cursor'].'"';
+                cursor: "'.$marker['cursor'].'"';
         }
         if ($marker['draggable']) {
             $marker_output .= ',
-				draggable: true';
+                draggable: true';
         }
         if ($marker['flat']) {
             $marker_output .= ',
-				flat: true';
+                flat: true';
         }
         if ($marker['icon'] != "") {
             $marker_output .= ',
-				icon: marker_icon';
+                icon: marker_icon';
         }
         if (!$marker['raiseondrag']) {
             $marker_output .= ',
-				raiseOnDrag: false';
+                raiseOnDrag: false';
         }
         if ($marker['shadow'] != "") {
             $marker_output .= ',
-				shadow: "'.$marker['shadow'].'"';
+                shadow: "'.$marker['shadow'].'"';
         }
         if ($marker['title'] != "") {
             $marker_output .= ',
-				title: "'.$marker['title'].'"';
+                title: "'.$marker['title'].'"';
             $this->markersInfo['marker_'.$marker_id]['title'] = $marker['title'];
         }
         if (!$marker['visible']) {
             $marker_output .= ',
-				visible: false';
+                visible: false';
         }
         if ($marker['zIndex'] != "" && is_numeric($marker['zIndex'])) {
             $marker_output .= ',
-				zIndex: '.$marker['zIndex'];
+                zIndex: '.$marker['zIndex'];
         }
         if ($marker['animation'] != "" && (strtoupper($marker['animation']) == "DROP" || strtoupper($marker['animation'] == "BOUNCE"))) {
             $marker_output .= ',
-				animation:  google.maps.Animation.'.strtoupper($marker['animation']);
+                animation:  google.maps.Animation.'.strtoupper($marker['animation']);
         }
         if ($marker['label'] != "") {
             $marker_output .= ',
-				label: "'.$marker['label'].'"';
+                label: "'.$marker['label'].'"';
         }
 
 
 
         $marker_output .= '
-			};
-			marker_'.$marker_id.' = createMarker_'.$this->map_name.'(markerOptions);
-			marker_'.$marker_id.'.id = marker_'.$marker_id.';
-			';
+            };
+            marker_'.$marker_id.' = createMarker_'.$this->map_name.'(markerOptions);
+            marker_'.$marker_id.'.id = marker_'.$marker_id.';
+            ';
 
         if ($marker['infowindow_content'] != "") {
 
@@ -359,100 +360,100 @@ class GMaps
             $marker['infowindow_content'] = str_replace('"', '\"', $marker['infowindow_content']);
 
             $marker_output .= '
-			marker_'.$marker_id.'.set("content", "'.$marker['infowindow_content'].'");
+            marker_'.$marker_id.'.set("content", "'.$marker['infowindow_content'].'");
 
-			google.maps.event.addListener(marker_'.$marker_id.', "click", function(event) {
-				iw_'.$this->map_name.'.setContent(this.get("content"));
-				iw_'.$this->map_name.'.open('.$this->map_name.', this);
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "click", function(event) {
+                iw_'.$this->map_name.'.setContent(this.get("content"));
+                iw_'.$this->map_name.'.open('.$this->map_name.', this);
+            ';
             if ($marker['onclick'] != "") {
                 $marker_output .= $marker['onclick'].'
-			';
+            ';
             }
             $marker_output .= '
-			});
-			';
+            });
+            ';
         } else {
             if ($marker['onclick'] != "") {
                 $marker_output .= '
-				google.maps.event.addListener(marker_'.$marker_id.', "click", function(event) {
-					'.$marker['onclick'].'
-				});
-				';
+                google.maps.event.addListener(marker_'.$marker_id.', "click", function(event) {
+                    '.$marker['onclick'].'
+                });
+                ';
             }
         }
 
         if ($marker['ondblclick'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "dblclick", function(event) {
-				'.$marker['ondblclick'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "dblclick", function(event) {
+                '.$marker['ondblclick'].'
+            });
+            ';
         }
         if ($marker['onmousedown'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "mousedown", function(event) {
-				'.$marker['onmousedown'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "mousedown", function(event) {
+                '.$marker['onmousedown'].'
+            });
+            ';
         }
         if ($marker['onmouseout'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "mouseout", function(event) {
-				'.$marker['onmouseout'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "mouseout", function(event) {
+                '.$marker['onmouseout'].'
+            });
+            ';
         }
         if ($marker['onmouseover'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "mouseover", function(event) {
-				'.$marker['onmouseover'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "mouseover", function(event) {
+                '.$marker['onmouseover'].'
+            });
+            ';
         }
         if ($marker['onmouseup'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "mouseup", function(event) {
-				'.$marker['onmouseup'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "mouseup", function(event) {
+                '.$marker['onmouseup'].'
+            });
+            ';
         }
         if ($marker['onpositionchanged'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "position_changed", function(event) {
-				'.$marker['onpositionchanged'].'(event, this);
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "position_changed", function(event) {
+                '.$marker['onpositionchanged'].'(event, this);
+            });
+            ';
         }
         if ($marker['onrightclick'] != "") {
             $marker_output .= '
-			google.maps.event.addListener(marker_'.$marker_id.', "rightclick", function(event) {
-				'.$marker['onrightclick'].'
-			});
-			';
+            google.maps.event.addListener(marker_'.$marker_id.', "rightclick", function(event) {
+                '.$marker['onrightclick'].'
+            });
+            ';
         }
 
         if ($marker['draggable']) {
             if ($marker['ondrag'] != "") {
                 $marker_output .= '
-				google.maps.event.addListener(marker_'.$marker_id.', "drag", function(event) {
-					'.$marker['ondrag'].'
-				});
-				';
+                google.maps.event.addListener(marker_'.$marker_id.', "drag", function(event) {
+                    '.$marker['ondrag'].'
+                });
+                ';
             }
             if ($marker['ondragend'] != "") {
                 $marker_output .= '
-				google.maps.event.addListener(marker_'.$marker_id.', "dragend", function(event) {
-					'.$marker['ondragend'].'
-				});
-				';
+                google.maps.event.addListener(marker_'.$marker_id.', "dragend", function(event) {
+                    '.$marker['ondragend'].'
+                });
+                ';
             }
             if ($marker['ondragstart'] != "") {
                 $marker_output .= '
-				google.maps.event.addListener(marker_'.$marker_id.', "dragstart", function(event) {
-					'.$marker['ondragstart'].'
-				});
-				';
+                google.maps.event.addListener(marker_'.$marker_id.', "dragstart", function(event) {
+                    '.$marker['ondragstart'].'
+                });
+                ';
             }
         }
 
@@ -488,7 +489,7 @@ class GMaps
 
         if (count($polyline['points'])) {
             $polyline_output .= '
-				var polyline_plan_'.count($this->polylines).' = [';
+                var polyline_plan_'.count($this->polylines).' = [';
             $i = 0;
             $lat_long_output = '';
             foreach ($polyline['points'] as $point) {
@@ -499,17 +500,17 @@ class GMaps
                 if ($this->is_lat_long($point)) {
                     $lat_long_to_push = $point;
                     $polyline_output .= '
-					new google.maps.LatLng('.$point.')
-					';
+                    new google.maps.LatLng('.$point.')
+                    ';
                 } else {
                     $lat_long = $this->get_lat_long_from_address($point);
                     $polyline_output .= '
-					new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                    new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                     $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
                 }
                 $lat_long_output .= '
-					lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-				';
+                    lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+                ';
                 $i++;
             }
             $polyline_output .= '];';
@@ -517,81 +518,81 @@ class GMaps
             $polyline_output .= $lat_long_output;
 
             $polyline_output .= '
-				var polyline_'.count($this->polylines).' = new google.maps.Polyline({
-    				path: polyline_plan_'.count($this->polylines).',
-    				strokeColor: "'.$polyline['strokeColor'].'",
-    				strokeOpacity: '.$polyline['strokeOpacity'].',
-    				strokeWeight: '.$polyline['strokeWeight'];
+                var polyline_'.count($this->polylines).' = new google.maps.Polyline({
+                    path: polyline_plan_'.count($this->polylines).',
+                    strokeColor: "'.$polyline['strokeColor'].'",
+                    strokeOpacity: '.$polyline['strokeOpacity'].',
+                    strokeWeight: '.$polyline['strokeWeight'];
             if (!$polyline['clickable']) {
                 $polyline_output .= ',
-					clickable: false';
+                    clickable: false';
             }
             if ($polyline['zIndex'] != "" && is_numeric($polyline['zIndex'])) {
                 $polyline_output .= ',
-					zIndex: '.$polyline['zIndex'];
+                    zIndex: '.$polyline['zIndex'];
             }
             $polyline_output .= '
-				});
+                });
 
-				polyline_'.count($this->polylines).'.setMap('.$this->map_name.');
+                polyline_'.count($this->polylines).'.setMap('.$this->map_name.');
 
-			';
+            ';
 
             if ($polyline['onclick'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "click", function() {
-					'.$polyline['onclick'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "click", function() {
+                    '.$polyline['onclick'].'
+                });
+                ';
             }
             if ($polyline['ondblclick'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "dblclick", function() {
-					'.$polyline['ondblclick'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "dblclick", function() {
+                    '.$polyline['ondblclick'].'
+                });
+                ';
             }
             if ($polyline['onmousedown'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "mousedown", function() {
-					'.$polyline['onmousedown'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "mousedown", function() {
+                    '.$polyline['onmousedown'].'
+                });
+                ';
             }
             if ($polyline['onmousemove'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "mousemove", function() {
-					'.$polyline['onmousemove'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "mousemove", function() {
+                    '.$polyline['onmousemove'].'
+                });
+                ';
             }
             if ($polyline['onmouseout'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseout", function() {
-					'.$polyline['onmouseout'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseout", function() {
+                    '.$polyline['onmouseout'].'
+                });
+                ';
             }
             if ($polyline['onmouseover'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseover", function() {
-					'.$polyline['onmouseover'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseover", function() {
+                    '.$polyline['onmouseover'].'
+                });
+                ';
             }
             if ($polyline['onmouseup'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseup", function() {
-					'.$polyline['onmouseup'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "mouseup", function() {
+                    '.$polyline['onmouseup'].'
+                });
+                ';
             }
             if ($polyline['onrightclick'] != "") {
                 $polyline_output .= '
-				google.maps.event.addListener(polyline_'.count($this->polylines).', "rightclick", function() {
-					'.$polyline['onrightclick'].'
-				});
-				';
+                google.maps.event.addListener(polyline_'.count($this->polylines).', "rightclick", function() {
+                    '.$polyline['onrightclick'].'
+                });
+                ';
             }
 
             array_push($this->polylines, $polyline_output);
@@ -629,7 +630,7 @@ class GMaps
 
         if (count($polygon['points'])) {
             $polygon_output .= '
-				var polygon_plan_'.count($this->polygons).' = [';
+                var polygon_plan_'.count($this->polygons).' = [';
             $i = 0;
             $lat_long_output = '';
             foreach ($polygon['points'] as $point) {
@@ -640,17 +641,17 @@ class GMaps
                 if ($this->is_lat_long($point)) {
                     $lat_long_to_push = $point;
                     $polygon_output .= '
-					new google.maps.LatLng('.$point.')
-					';
+                    new google.maps.LatLng('.$point.')
+                    ';
                 } else {
                     $lat_long = $this->get_lat_long_from_address($point);
                     $polygon_output .= '
-					new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                    new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                     $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
                 }
                 $lat_long_output .= '
-					lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-				';
+                    lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+                ';
                 $i++;
             }
             $polygon_output .= '];';
@@ -659,88 +660,88 @@ class GMaps
         }
 
         $polygon_output .= '
-			var polygon_'.count($this->polygons).' = new google.maps.Polygon({
-    			';
+            var polygon_'.count($this->polygons).' = new google.maps.Polygon({
+                ';
         if (count($polygon['points'])) {
             $polygon_output .= 'path: polygon_plan_'.count($this->polygons).',
-					';
+                    ';
         }
         $polygon_output .= '
-    			strokeColor: "'.$polygon['strokeColor'].'",
-    			strokeOpacity: '.$polygon['strokeOpacity'].',
-    			strokeWeight: '.$polygon['strokeWeight'].',
-				fillColor: "'.$polygon['fillColor'].'",
-				fillOpacity: '.$polygon['fillOpacity'];
+                strokeColor: "'.$polygon['strokeColor'].'",
+                strokeOpacity: '.$polygon['strokeOpacity'].',
+                strokeWeight: '.$polygon['strokeWeight'].',
+                fillColor: "'.$polygon['fillColor'].'",
+                fillOpacity: '.$polygon['fillOpacity'];
         if (!$polygon['clickable']) {
             $polygon_output .= ',
-				clickable: false';
+                clickable: false';
         }
         if ($polygon['zIndex'] != "" && is_numeric($polygon['zIndex'])) {
             $polygon_output .= ',
-				zIndex: '.$polygon['zIndex'];
+                zIndex: '.$polygon['zIndex'];
         }
         $polygon_output .= '
-			});
+            });
 
-			polygon_'.count($this->polygons).'.setMap('.$this->map_name.');
+            polygon_'.count($this->polygons).'.setMap('.$this->map_name.');
 
-		';
+        ';
 
         if ($polygon['onclick'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "click", function() {
-				'.$polygon['onclick'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "click", function() {
+                '.$polygon['onclick'].'
+            });
+            ';
         }
         if ($polygon['ondblclick'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "dblclick", function() {
-				'.$polygon['ondblclick'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "dblclick", function() {
+                '.$polygon['ondblclick'].'
+            });
+            ';
         }
         if ($polygon['onmousedown'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "mousedown", function() {
-				'.$polygon['onmousedown'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "mousedown", function() {
+                '.$polygon['onmousedown'].'
+            });
+            ';
         }
         if ($polygon['onmousemove'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "mousemove", function() {
-				'.$polygon['onmousemove'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "mousemove", function() {
+                '.$polygon['onmousemove'].'
+            });
+            ';
         }
         if ($polygon['onmouseout'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseout", function() {
-				'.$polygon['onmouseout'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseout", function() {
+                '.$polygon['onmouseout'].'
+            });
+            ';
         }
         if ($polygon['onmouseover'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseover", function() {
-				'.$polygon['onmouseover'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseover", function() {
+                '.$polygon['onmouseover'].'
+            });
+            ';
         }
         if ($polygon['onmouseup'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseup", function() {
-				'.$polygon['onmouseup'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "mouseup", function() {
+                '.$polygon['onmouseup'].'
+            });
+            ';
         }
         if ($polygon['onrightclick'] != "") {
             $polygon_output .= '
-			google.maps.event.addListener(polygon_'.count($this->polygons).', "rightclick", function() {
-				'.$polygon['onrightclick'].'
-			});
-			';
+            google.maps.event.addListener(polygon_'.count($this->polygons).', "rightclick", function() {
+                '.$polygon['onrightclick'].'
+            });
+            ';
         }
 
         array_push($this->polygons, $polygon_output);
@@ -781,96 +782,96 @@ class GMaps
             if ($this->is_lat_long($circle['center'])) {
                 $lat_long_to_push = $circle['center'];
                 $circle_output = '
-				var circleCenter = new google.maps.LatLng('.$circle['center'].')
-				';
+                var circleCenter = new google.maps.LatLng('.$circle['center'].')
+                ';
             } else {
                 $lat_long = $this->get_lat_long_from_address($circle['center']);
                 $circle_output = '
-				var circleCenter = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                var circleCenter = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                 $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
             }
             $circle_output .= '
-				lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-			';
+                lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+            ';
 
             $circle_output .= '
-				var circleOptions = {
-					strokeColor: "'.$circle['strokeColor'].'",
-					strokeOpacity: '.$circle['strokeOpacity'].',
-					strokeWeight: '.$circle['strokeWeight'].',
-					fillColor: "'.$circle['fillColor'].'",
-					fillOpacity: '.$circle['fillOpacity'].',
-					map: '.$this->map_name.',
-					center: circleCenter,
-					radius: '.$circle['radius'];
+                var circleOptions = {
+                    strokeColor: "'.$circle['strokeColor'].'",
+                    strokeOpacity: '.$circle['strokeOpacity'].',
+                    strokeWeight: '.$circle['strokeWeight'].',
+                    fillColor: "'.$circle['fillColor'].'",
+                    fillOpacity: '.$circle['fillOpacity'].',
+                    map: '.$this->map_name.',
+                    center: circleCenter,
+                    radius: '.$circle['radius'];
             if (!$circle['clickable']) {
                 $circle_output .= ',
-					clickable: false';
+                    clickable: false';
             }
             if ($circle['zIndex'] != "" && is_numeric($circle['zIndex'])) {
                 $circle_output .= ',
-					zIndex: '.$circle['zIndex'];
+                    zIndex: '.$circle['zIndex'];
             }
             $circle_output .= '
-				};
-				var circle_'.count($this->circles).' = new google.maps.Circle(circleOptions);
-			';
+                };
+                var circle_'.count($this->circles).' = new google.maps.Circle(circleOptions);
+            ';
 
             if ($circle['onclick'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "click", function() {
-					'.$circle['onclick'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "click", function() {
+                    '.$circle['onclick'].'
+                });
+                ';
             }
             if ($circle['ondblclick'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "dblclick", function() {
-					'.$circle['ondblclick'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "dblclick", function() {
+                    '.$circle['ondblclick'].'
+                });
+                ';
             }
             if ($circle['onmousedown'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "mousedown", function() {
-					'.$circle['onmousedown'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "mousedown", function() {
+                    '.$circle['onmousedown'].'
+                });
+                ';
             }
             if ($circle['onmousemove'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "mousemove", function() {
-					'.$circle['onmousemove'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "mousemove", function() {
+                    '.$circle['onmousemove'].'
+                });
+                ';
             }
             if ($circle['onmouseout'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "mouseout", function() {
-					'.$circle['onmouseout'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "mouseout", function() {
+                    '.$circle['onmouseout'].'
+                });
+                ';
             }
             if ($circle['onmouseover'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "mouseover", function() {
-					'.$circle['onmouseover'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "mouseover", function() {
+                    '.$circle['onmouseover'].'
+                });
+                ';
             }
             if ($circle['onmouseup'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "mouseup", function() {
-					'.$circle['onmouseup'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "mouseup", function() {
+                    '.$circle['onmouseup'].'
+                });
+                ';
             }
             if ($circle['onrightclick'] != "") {
                 $circle_output .= '
-				google.maps.event.addListener(circle_'.count($this->circles).', "rightclick", function() {
-					'.$circle['onrightclick'].'
-				});
-				';
+                google.maps.event.addListener(circle_'.count($this->circles).', "rightclick", function() {
+                    '.$circle['onrightclick'].'
+                });
+                ';
             }
 
             array_push($this->circles, $circle_output);
@@ -912,113 +913,113 @@ class GMaps
             if ($this->is_lat_long($rectangle['positionSW'])) {
                 $lat_long_to_push = $rectangle['positionSW'];
                 $rectangle_output .= '
-				var positionSW = new google.maps.LatLng('.$rectangle['positionSW'].')
-				';
+                var positionSW = new google.maps.LatLng('.$rectangle['positionSW'].')
+                ';
             } else {
                 $lat_long = $this->get_lat_long_from_address($rectangle['positionSW']);
                 $rectangle_output .= '
-				var positionSW = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                var positionSW = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                 $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
             }
             $rectangle_output .= '
-				lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-			';
+                lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+            ';
 
             $lat_long_to_push = '';
             if ($this->is_lat_long($rectangle['positionNE'])) {
                 $lat_long_to_push = $rectangle['positionNE'];
                 $rectangle_output .= '
-				var positionNE = new google.maps.LatLng('.$rectangle['positionNE'].')
-				';
+                var positionNE = new google.maps.LatLng('.$rectangle['positionNE'].')
+                ';
             } else {
                 $lat_long = $this->get_lat_long_from_address($rectangle['positionNE']);
                 $rectangle_output .= '
-				var positionNE = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                var positionNE = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                 $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
             }
             $rectangle_output .= '
-				lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-			';
+                lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+            ';
 
             $rectangle_output .= '
-				var rectangleOptions = {
-					strokeColor: "'.$rectangle['strokeColor'].'",
-					strokeOpacity: '.$rectangle['strokeOpacity'].',
-					strokeWeight: '.$rectangle['strokeWeight'].',
-					fillColor: "'.$rectangle['fillColor'].'",
-					fillOpacity: '.$rectangle['fillOpacity'].',
-					map: '.$this->map_name.',
-					bounds: new google.maps.LatLngBounds(positionSW, positionNE)';
+                var rectangleOptions = {
+                    strokeColor: "'.$rectangle['strokeColor'].'",
+                    strokeOpacity: '.$rectangle['strokeOpacity'].',
+                    strokeWeight: '.$rectangle['strokeWeight'].',
+                    fillColor: "'.$rectangle['fillColor'].'",
+                    fillOpacity: '.$rectangle['fillOpacity'].',
+                    map: '.$this->map_name.',
+                    bounds: new google.maps.LatLngBounds(positionSW, positionNE)';
             if (!$rectangle['clickable']) {
                 $rectangle_output .= ',
-					clickable: false';
+                    clickable: false';
             }
             if ($rectangle['zIndex'] != "" && is_numeric($rectangle['zIndex'])) {
                 $rectangle_output .= ',
-					zIndex: '.$rectangle['zIndex'];
+                    zIndex: '.$rectangle['zIndex'];
             }
             $rectangle_output .= '
-				};';
+                };';
 
             $rectangle_output .= '
-				var rectangle_'.count($this->rectangles).' = new google.maps.Rectangle(rectangleOptions);
-			';
+                var rectangle_'.count($this->rectangles).' = new google.maps.Rectangle(rectangleOptions);
+            ';
 
             if ($rectangle['onclick'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "click", function() {
-					'.$rectangle['onclick'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "click", function() {
+                    '.$rectangle['onclick'].'
+                });
+                ';
             }
             if ($rectangle['ondblclick'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "dblclick", function() {
-					'.$rectangle['ondblclick'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "dblclick", function() {
+                    '.$rectangle['ondblclick'].'
+                });
+                ';
             }
             if ($rectangle['onmousedown'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mousedown", function() {
-					'.$rectangle['onmousedown'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mousedown", function() {
+                    '.$rectangle['onmousedown'].'
+                });
+                ';
             }
             if ($rectangle['onmousemove'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mousemove", function() {
-					'.$rectangle['onmousemove'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mousemove", function() {
+                    '.$rectangle['onmousemove'].'
+                });
+                ';
             }
             if ($rectangle['onmouseout'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseout", function() {
-					'.$rectangle['onmouseout'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseout", function() {
+                    '.$rectangle['onmouseout'].'
+                });
+                ';
             }
             if ($rectangle['onmouseover'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseover", function() {
-					'.$rectangle['onmouseover'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseover", function() {
+                    '.$rectangle['onmouseover'].'
+                });
+                ';
             }
             if ($rectangle['onmouseup'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseup", function() {
-					'.$rectangle['onmouseup'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "mouseup", function() {
+                    '.$rectangle['onmouseup'].'
+                });
+                ';
             }
             if ($rectangle['onrightclick'] != "") {
                 $rectangle_output .= '
-				google.maps.event.addListener(rectangle_'.count($this->rectangles).', "rightclick", function() {
-					'.$rectangle['onrightclick'].'
-				});
-				';
+                google.maps.event.addListener(rectangle_'.count($this->rectangles).', "rightclick", function() {
+                    '.$rectangle['onrightclick'].'
+                });
+                ';
             }
 
             array_push($this->rectangles, $rectangle_output);
@@ -1048,48 +1049,48 @@ class GMaps
             if ($this->is_lat_long($overlay['positionSW'])) {
                 $lat_long_to_push = $overlay['positionSW'];
                 $overlay_output .= '
-				var positionSW = new google.maps.LatLng('.$overlay['positionSW'].')
-				';
+                var positionSW = new google.maps.LatLng('.$overlay['positionSW'].')
+                ';
             } else {
                 $lat_long = $this->get_lat_long_from_address($overlay['positionSW']);
                 $overlay_output .= '
-				var positionSW = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                var positionSW = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                 $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
             }
             $overlay_output .= '
-				lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-			';
+                lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+            ';
 
             $lat_long_to_push = '';
             if ($this->is_lat_long($overlay['positionNE'])) {
                 $lat_long_to_push = $overlay['positionNE'];
                 $overlay_output .= '
-				var positionNE = new google.maps.LatLng('.$overlay['positionNE'].')
-				';
+                var positionNE = new google.maps.LatLng('.$overlay['positionNE'].')
+                ';
             } else {
                 $lat_long = $this->get_lat_long_from_address($overlay['positionNE']);
                 $overlay_output .= '
-				var positionNE = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
+                var positionNE = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')';
                 $lat_long_to_push = $lat_long[0].', '.$lat_long[1];
             }
             $overlay_output .= '
-				lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
-			';
+                lat_longs_'.$this->map_name.'.push(new google.maps.LatLng('.$lat_long_to_push.'));
+            ';
 
             $overlay_output .= '
-				var overlay_'.count($this->overlays).' = new google.maps.GroundOverlay("'.$overlay['image'].'", new google.maps.LatLngBounds(positionSW, positionNE), { map: '.$this->map_name;
+                var overlay_'.count($this->overlays).' = new google.maps.GroundOverlay("'.$overlay['image'].'", new google.maps.LatLngBounds(positionSW, positionNE), { map: '.$this->map_name;
             if (!$overlay['clickable']) {
                 $overlay_output .= ', clickable: false';
             }
             $overlay_output .= '});
-			';
+            ';
 
             if ($overlay['onclick'] != "") {
                 $overlay_output .= '
-				google.maps.event.addListener(overlay_'.count($this->overlays).', "click", function() {
-					'.$overlay['onclick'].'
-				});
-				';
+                google.maps.event.addListener(overlay_'.count($this->overlays).', "click", function() {
+                    '.$overlay['onclick'].'
+                });
+                ';
             }
 
             array_push($this->overlays, $overlay_output);
@@ -1136,6 +1137,9 @@ class GMaps
             if ($this->drawing) {
                 array_push($libraries, 'drawing');
             }
+            if ($this->geometry) {
+                array_push($libraries, 'geometry');
+            }
             if (count($libraries)) {
                 $apiLocation .= '&libraries='.implode(",", $libraries);
             }
@@ -1143,91 +1147,91 @@ class GMaps
             if (!$this->loadAsynchronously) {
                 $this->output_js .= '
 
-				<script type="text/javascript" src="'.$apiLocation.'"></script>';
+                <script type="text/javascript" src="'.$apiLocation.'"></script>';
             }
 
             if ($this->cluster) {
                 $this->output_js .= '
 
-			<script type="text/javascript" src="'.asset('libs/FarhanWazir/GMaps/markerclusterer.js').'"></script >
-					';
+            <script type="text/javascript" src="'.asset('libs/FarhanWazir/GMaps/markerclusterer.js').'"></script >
+                    ';
             }
         }
         if ($this->jsfile == "") {
             $this->output_js .= '
-			<script type="text/javascript">
-			//<![CDATA[
-			';
+            <script type="text/javascript">
+            //<![CDATA[
+            ';
         }
 
         $this->output_js_contents .= '
-			var '.$this->map_name.'; // Global declaration of the map
-			var lat_longs_'.$this->map_name.' = new Array();
-			var markers_'.$this->map_name.' = new Array();
+            var '.$this->map_name.'; // Global declaration of the map
+            var lat_longs_'.$this->map_name.' = new Array();
+            var markers_'.$this->map_name.' = new Array();
             var iw_'.$this->map_name.';
             var geocoder; // Global declaration of geocoder for reverser location from latLng
-			';
+            ';
         if ($this->cluster) {
             $this->output_js_contents .= 'var markerCluster;
-			';
+            ';
         }
         if ($this->directions) {
             $rendererOptions = '';
             if ($this->directionsDraggable) {
                 $this->output_js_contents .= '
-			var rendererOptions = { draggable: true };
-			';
+            var rendererOptions = { draggable: true };
+            ';
                 $rendererOptions = 'rendererOptions';
             }
             $this->output_js_contents .= 'var directionsDisplay = new google.maps.DirectionsRenderer('.$rendererOptions.');
-			var directionsService = new google.maps.DirectionsService();
-			';
+            var directionsService = new google.maps.DirectionsService();
+            ';
         }
         if ($this->places) {
             $this->output_js_contents .= 'var placesService;
-			';
+            ';
             if ($this->placesAutocompleteInputID != "") {
                 $this->output_js_contents .= 'var placesAutocomplete;
-			';
+            ';
             }
         }
         if ($this->adsense) {
             $this->output_js_contents .= 'var adUnit;
-			';
+            ';
         }
         if ($this->drawing) {
             $this->output_js_contents .= 'var drawingManager;
-			';
+            ';
         }
 
         /*$this->output_js_contents .= '
-			iw_'.$this->map_name.' = new google.maps.InfoWindow(';
+            iw_'.$this->map_name.' = new google.maps.InfoWindow(';
         if ($this->infowindowMaxWidth != 0) {
             $this->output_js_contents .= '{
-				maxWidth: '.$this->infowindowMaxWidth.'
-			}';
+                maxWidth: '.$this->infowindowMaxWidth.'
+            }';
         }
         $this->output_js_contents .= ');
 
-				 ';*/
+                 ';*/
 
         $this->output_js_contents .= 'function initialize_'.$this->map_name.'() {
 
-				';
+                ';
 
         $styleOutput = '';
         if (count($this->styles)) {
             $styles = 0;
             foreach ($this->styles as $style) {
                 $this->output_js_contents .= 'var styles_'.$styles.' = '.json_encode($style['definition']).';
-				';
+                ';
 
                 if ($this->stylesAsMapTypes) {
                     $this->output_js_contents .= 'var styles_'.$styles.' = new google.maps.StyledMapType(styles_'.$styles.', {name:"'.$style['name'].'"});
-				';
+                ';
                 } else {
                     $styleOutput .= $this->map_name.'.setOptions({styles: styles_'.$styles.'});
-				';
+                ';
                     break;
                 }
 
@@ -1245,19 +1249,19 @@ class GMaps
         }
 
         $this->output_js_contents .= '
-			iw_'.$this->map_name.' = new google.maps.InfoWindow(';
+            iw_'.$this->map_name.' = new google.maps.InfoWindow(';
         if ($this->infowindowMaxWidth != 0) {
             $this->output_js_contents .= '{
-				maxWidth: '.$this->infowindowMaxWidth.'
-			}';
+                maxWidth: '.$this->infowindowMaxWidth.'
+            }';
         }
         $this->output_js_contents .= ');
 
-				 ';
+                 ';
 
         $this->output_js_contents .= '
-				var myOptions = {
-			  		';
+                var myOptions = {
+                    ';
         if ($this->zoom == "auto") {
             $this->output_js_contents .= 'zoom: 13,';
         } else {
@@ -1265,7 +1269,7 @@ class GMaps
         }
         if ($this->center != "auto") {
             $this->output_js_contents .= '
-					center: myLatlng,';
+                    center: myLatlng,';
         }
         if (strtolower($this->map_type) == "street") {
             $map_type = "ROADMAP";
@@ -1273,50 +1277,55 @@ class GMaps
             $map_type = $this->map_type;
         }
         $this->output_js_contents .= '
-			  		mapTypeId: google.maps.MapTypeId.'.$map_type;
+                    mapTypeId: google.maps.MapTypeId.'.$map_type;
         if ($this->backgroundColor) {
             $this->output_js_contents .= ',
-					backgroundColor: \''.$this->backgroundColor.'\'';
+                    backgroundColor: \''.$this->backgroundColor.'\'';
         }
         if ($this->disableDefaultUI) {
             $this->output_js_contents .= ',
-					disableDefaultUI: true';
+                    disableDefaultUI: true';
         }
         if ($this->disableMapTypeControl) {
             $this->output_js_contents .= ',
-					mapTypeControl: false';
+                    mapTypeControl: false';
         }
         if ($this->disableNavigationControl) {
             $this->output_js_contents .= ',
-					navigationControl: false';
+                    navigationControl: false';
         }
         if ($this->disableScaleControl) {
             $this->output_js_contents .= ',
-					scaleControl: false';
+                    scaleControl: false';
         }
         if ($this->disableStreetViewControl) {
             $this->output_js_contents .= ',
-					streetViewControl: false';
+                    streetViewControl: false';
+        }
+        //Added for full screen control
+         if ($this->enableFullScreenControl) {
+            $this->output_js_contents .= ',
+                    fullscreenControl: true';
         }
         if ($this->disableDoubleClickZoom) {
             $this->output_js_contents .= ',
-					disableDoubleClickZoom: true';
+                    disableDoubleClickZoom: true';
         }
         if (!$this->draggable) {
             $this->output_js_contents .= ',
-					draggable: false';
+                    draggable: false';
         }
         if ($this->draggableCursor != "") {
             $this->output_js_contents .= ',
-					draggableCursor: "'.$this->draggableCursor.'"';
+                    draggableCursor: "'.$this->draggableCursor.'"';
         }
         if ($this->draggingCursor != "") {
             $this->output_js_contents .= ',
-					draggingCursor: "'.$this->draggingCursor.'"';
+                    draggingCursor: "'.$this->draggingCursor.'"';
         }
         if (!$this->keyboardShortcuts) {
             $this->output_js_contents .= ',
-					keyboardShortcuts: false';
+                    keyboardShortcuts: false';
         }
         $mapTypeControlOptions = array();
         $map_types = array();
@@ -1336,12 +1345,12 @@ class GMaps
             foreach ($this->styles as $style) {
                 array_push($map_types, '"style'.$styles.'"');
                 $styleOutput .= '
-					  '.$this->map_name.'.mapTypes.set("style'.$styles.'", styles_'.$styles.');
-				';
+                      '.$this->map_name.'.mapTypes.set("style'.$styles.'", styles_'.$styles.');
+                ';
                 if ($this->stylesAsMapTypesDefault == $style['name']) {
                     $styleOutput .= '
-					  '.$this->map_name.'.setMapTypeId("style'.$styles.'");
-				';
+                      '.$this->map_name.'.setMapTypeId("style'.$styles.'");
+                ';
                 }
                 $styles++;
             }
@@ -1351,40 +1360,40 @@ class GMaps
         }
         if (count($mapTypeControlOptions)) {
             $this->output_js_contents .= ',
-					mapTypeControlOptions: {'.implode(",", $mapTypeControlOptions).'}';
+                    mapTypeControlOptions: {'.implode(",", $mapTypeControlOptions).'}';
         }
         if ($this->minzoom != "") {
             $this->output_js_contents .= ',
-					minZoom: '.$this->minzoom;
+                    minZoom: '.$this->minzoom;
         }
         if ($this->maxzoom != "") {
             $this->output_js_contents .= ',
-					maxZoom: '.$this->maxzoom;
+                    maxZoom: '.$this->maxzoom;
         }
         if ($this->noClear) {
             $this->output_js_contents .= ',
-					noClear: true';
+                    noClear: true';
         }
         if ($this->navigationControlPosition != "") {
             $this->output_js_contents .= ',
-					navigationControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->navigationControlPosition).'}';
+                    navigationControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->navigationControlPosition).'}';
         }
         if ($this->scaleControlPosition != "") {
             $this->output_js_contents .= ',
-			         scaleControl: true,
-					scaleControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->scaleControlPosition).'}';
+                     scaleControl: true,
+                    scaleControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->scaleControlPosition).'}';
         }
         if (!$this->scrollwheel) {
             $this->output_js_contents .= ',
-					scrollwheel: false';
+                    scrollwheel: false';
         }
         if ($this->streetViewControlPosition != "") {
             $this->output_js_contents .= ',
-					streetViewControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->streetViewControlPosition).'}';
+                    streetViewControlOptions: {position: google.maps.ControlPosition.'.strtoupper($this->streetViewControlPosition).'}';
         }
         if ($this->tilt == 45) {
             $this->output_js_contents .= ',
-					tilt: '.$this->tilt;
+                    tilt: '.$this->tilt;
         }
         $zoomControlOptions = array();
         if ($this->zoomControlPosition != "") {
@@ -1395,7 +1404,7 @@ class GMaps
         }
         if (count($zoomControlOptions)) {
             $this->output_js_contents .= ',
-					zoomControlOptions: {'.implode(",", $zoomControlOptions).'}';
+                    zoomControlOptions: {'.implode(",", $zoomControlOptions).'}';
         }
 
 
@@ -1468,18 +1477,18 @@ class GMaps
 
         if ($styleOutput != "") {
             $this->output_js_contents .= $styleOutput.'
-				';
+                ';
         }
 
         if ($this->trafficOverlay) {
             $this->output_js_contents .= 'var trafficLayer = new google.maps.TrafficLayer();
-				trafficLayer.setMap('.$this->map_name.');
-				';
+                trafficLayer.setMap('.$this->map_name.');
+                ';
         }
         if ($this->bicyclingOverlay) {
             $this->output_js_contents .= 'var bikeLayer = new google.maps.BicyclingLayer();
-				bikeLayer.setMap('.$this->map_name.');
-				';
+                bikeLayer.setMap('.$this->map_name.');
+                ';
         }
 
         if ((is_array($this->kmlLayerURL) && count($this->kmlLayerURL)) || (!is_array($this->kmlLayerURL) && $this->kmlLayerURL != "")) {
@@ -1491,16 +1500,16 @@ class GMaps
                 $i = 0;
                 foreach ($this->kmlLayerURL as $kmlLayerURL) {
                     $this->output_js_contents .= '
-						var kmlLayerOptions = {
-							map: '.$this->map_name;
+                        var kmlLayerOptions = {
+                            map: '.$this->map_name;
                     if ($this->kmlLayerPreserveViewport) {
                         $this->output_js_contents .= ',
-							preserveViewport: true';
+                            preserveViewport: true';
                     }
                     $this->output_js_contents .= '
-						}
-						var kmlLayer_'.$i.' = new google.maps.KmlLayer("'.$kmlLayerURL.'", kmlLayerOptions);
-						';
+                        }
+                        var kmlLayer_'.$i.' = new google.maps.KmlLayer("'.$kmlLayerURL.'", kmlLayerOptions);
+                        ';
                     ++$i;
                 }
             }
@@ -1508,107 +1517,107 @@ class GMaps
 
         if ($this->panoramio) {
             $this->output_js_contents .= 'var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-				';
+                ';
             if ($this->panoramioTag != "") {
                 $this->output_js_contents .= 'panoramioLayer.setTag("'.$this->panoramioTag.'");
-				';
+                ';
             }
             if ($this->panoramioUser != "") {
                 $this->output_js_contents .= 'panoramioLayer.setUserId("'.$this->panoramioUser.'");
-				';
+                ';
             }
             $this->output_js_contents .= '
-				panoramioLayer.setMap('.$this->map_name.');
-				';
+                panoramioLayer.setMap('.$this->map_name.');
+                ';
         }
 
         if (strtolower($this->map_type) == "street") { // if defaulting the map to Street View
             $this->output_js_contents .= '
-			  	var streetViewOptions = {
-			    	position: myLatlng';
+                var streetViewOptions = {
+                    position: myLatlng';
             if (!$this->streetViewAddressControl) {
                 $this->output_js_contents .= ',
-					addressControl: false';
+                    addressControl: false';
             }
             if ($this->streetViewAddressPosition != "") {
                 $this->output_js_contents .= ',
-					addressControlOptions: { position: google.maps.ControlPosition.'.$this->streetViewAddressPosition.' }';
+                    addressControlOptions: { position: google.maps.ControlPosition.'.$this->streetViewAddressPosition.' }';
             }
             if ($this->streetViewCloseButton) {
                 $this->output_js_contents .= ',
-					enableCloseButton: true';
+                    enableCloseButton: true';
             }
             if (!$this->streetViewLinksControl) {
                 $this->output_js_contents .= ',
-					linksControl: false';
+                    linksControl: false';
             }
             if (!$this->streetViewPanControl) {
                 $this->output_js_contents .= ',
-					panControl: false';
+                    panControl: false';
             }
             if ($this->streetViewPanPosition != "") {
                 $this->output_js_contents .= ',
-					panControlOptions: { position: google.maps.ControlPosition.'.$this->streetViewPanPosition.' }';
+                    panControlOptions: { position: google.maps.ControlPosition.'.$this->streetViewPanPosition.' }';
             }
             if ($this->streetViewPovHeading != 0 || $this->streetViewPovPitch != 0 || $this->streetViewPovZoom != 0) {
                 $this->output_js_contents .= ',
-					pov: {
-						heading: '.$this->streetViewPovHeading.',
-						pitch: '.$this->streetViewPovPitch.',
-						zoom: '.$this->streetViewPovZoom.'
-					}';
+                    pov: {
+                        heading: '.$this->streetViewPovHeading.',
+                        pitch: '.$this->streetViewPovPitch.',
+                        zoom: '.$this->streetViewPovZoom.'
+                    }';
             }
             if (!$this->streetViewZoomControl) {
                 $this->output_js_contents .= ',
-					zoomControl: false';
+                    zoomControl: false';
             }
             if ($this->streetViewZoomPosition != "" || $this->streetViewZoomStyle != "") {
                 $this->output_js_contents .= ',
-					zoomControlOptions: {';
+                    zoomControlOptions: {';
                 if ($this->streetViewZoomPosition != "") {
                     $this->output_js_contents .= '
-						position: google.maps.ControlPosition.'.$this->streetViewZoomPosition.',';
+                        position: google.maps.ControlPosition.'.$this->streetViewZoomPosition.',';
                 }
                 if ($this->streetViewZoomStyle != "") {
                     $this->output_js_contents .= '
-						style: google.maps.ZoomControlStyle.'.$this->streetViewZoomStyle.',';
+                        style: google.maps.ZoomControlStyle.'.$this->streetViewZoomStyle.',';
                 }
                 $this->output_js_contents = trim($this->output_js_contents, ",");
                 $this->output_js_contents .= '}';
             }
             $this->output_js_contents .= '
-				};
-				var streetView = new google.maps.StreetViewPanorama(document.getElementById("'.$this->map_div_id.'"), streetViewOptions);
-				streetView.setVisible(true);
-	      		';
+                };
+                var streetView = new google.maps.StreetViewPanorama(document.getElementById("'.$this->map_div_id.'"), streetViewOptions);
+                streetView.setVisible(true);
+                ';
         }
 
         if ($this->center == "auto") { // if wanting to center on the users location
             $this->output_js_contents .= '
-				// Try W3C Geolocation (Preferred)
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						'.$this->map_name.'.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
-					}, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
-				// Browser doesn\'t support Geolocation
-				}else{
-					alert(\'Your browser does not support geolocation.\');
-				}
-			';
+                // Try W3C Geolocation (Preferred)
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        '.$this->map_name.'.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+                    }, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
+                // Browser doesn\'t support Geolocation
+                }else{
+                    alert(\'Your browser does not support geolocation.\');
+                }
+            ';
         }
 
         if ($this->directions) {
             $this->output_js_contents .= 'directionsDisplay.setMap('.$this->map_name.');
-			';
+            ';
             if ($this->directionsDivID != "") {
                 $this->output_js_contents .= 'directionsDisplay.setPanel(document.getElementById("'.$this->directionsDivID.'"));
-			';
+            ';
             }
             if ($this->directionsDraggable && $this->directionsChanged != "") {
                 $this->output_js_contents .= 'google.maps.event.addListener(directionsDisplay, "directions_changed", function() {
-					'.$this->directionsChanged.'
-				});
-			';
+                    '.$this->directionsChanged.'
+                });
+            ';
             }
         }
 
@@ -1618,14 +1627,14 @@ class GMaps
             }
 
             $this->output_js_contents .= 'drawingManager = new google.maps.drawing.DrawingManager({
-				drawingMode: google.maps.drawing.OverlayType.'.strtoupper($this->drawingDefaultMode).',
-  				drawingControl: '.(!$this->drawingControl ? 'false' : 'true').',
-  				drawingControlOptions: {
-  					position: google.maps.ControlPosition.'.strtoupper($this->drawingControlPosition);
+                drawingMode: google.maps.drawing.OverlayType.'.strtoupper($this->drawingDefaultMode).',
+                drawingControl: '.(!$this->drawingControl ? 'false' : 'true').',
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.'.strtoupper($this->drawingControlPosition);
             $shapeOptions = '';
             if (count($this->drawingModes)) {
                 $this->output_js_contents .= ',
-					drawingModes: [';
+                    drawingModes: [';
                 $i = 0;
                 foreach ($this->drawingModes as $drawingMode) {
                     if ($i > 0) {
@@ -1634,92 +1643,92 @@ class GMaps
                     $this->output_js_contents .= 'google.maps.drawing.OverlayType.'.strtoupper($drawingMode);
                     if (strtoupper($drawingMode) != "MARKER") {
                         $shapeOptions .= ',
-						'.strtolower($drawingMode).'Options: {
-							editable: true
-						}';
+                        '.strtolower($drawingMode).'Options: {
+                            editable: true
+                        }';
                     }
                     $i++;
                 }
                 $this->output_js_contents .= ']';
             }
             $this->output_js_contents .= '
-				}'.$shapeOptions.'
-			});
-			drawingManager.setMap('.$this->map_name.');
-			';
+                }'.$shapeOptions.'
+            });
+            drawingManager.setMap('.$this->map_name.');
+            ';
 
             $this->output_js_contents .= '
-			google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
-				var newShape = event.overlay;
-				newShape.type = event.type;
-				';
+            google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+                var newShape = event.overlay;
+                newShape.type = event.type;
+                ';
             if (count($this->drawingOnComplete)) {
                 foreach ($this->drawingOnComplete as $shape => $js) {
                     $this->output_js_contents .= 'if (event.type==google.maps.drawing.OverlayType.'.strtoupper($shape).') {
-						'.$js.'
-					}
-					';
+                        '.$js.'
+                    }
+                    ';
                 }
             }
 
             if (count($this->drawingOnEdit)) {
                 if (isset($this->drawingOnEdit['polygon'])) {
                     $this->output_js_contents .= '
-				if (newShape.type==google.maps.drawing.OverlayType.POLYGON) {
-					var newShapePaths = newShape.getPaths();
-					for (var i=0; i<newShapePaths.length; i++) {
-						google.maps.event.addListener(newShapePaths.getAt(i), "set_at", function(event) {
-							'.$this->drawingOnEdit['polygon'].'
-						});
-						google.maps.event.addListener(newShapePaths.getAt(i), "insert_at", function(event) {
-							'.$this->drawingOnEdit['polygon'].'
-						});
-						google.maps.event.addListener(newShapePaths.getAt(i), "remove_at", function(event) {
-							'.$this->drawingOnEdit['polygon'].'
-						});
-					}
-				}';
+                if (newShape.type==google.maps.drawing.OverlayType.POLYGON) {
+                    var newShapePaths = newShape.getPaths();
+                    for (var i=0; i<newShapePaths.length; i++) {
+                        google.maps.event.addListener(newShapePaths.getAt(i), "set_at", function(event) {
+                            '.$this->drawingOnEdit['polygon'].'
+                        });
+                        google.maps.event.addListener(newShapePaths.getAt(i), "insert_at", function(event) {
+                            '.$this->drawingOnEdit['polygon'].'
+                        });
+                        google.maps.event.addListener(newShapePaths.getAt(i), "remove_at", function(event) {
+                            '.$this->drawingOnEdit['polygon'].'
+                        });
+                    }
+                }';
                 }
                 if (isset($this->drawingOnEdit['polyline'])) {
                     $this->output_js_contents .= '
-				if (newShape.type==google.maps.drawing.OverlayType.POLYLINE) {
-					var newShapePaths = newShape.getPaths();
-					for (var i=0; i<newShapePaths.length; i++) {
-						google.maps.event.addListener(newShapePaths.getAt(i), "set_at", function(event) {
-							'.$this->drawingOnEdit['polyline'].'
-						});
-						google.maps.event.addListener(newShapePaths.getAt(i), "insert_at", function(event) {
-							'.$this->drawingOnEdit['polyline'].'
-						});
-						google.maps.event.addListener(newShapePaths.getAt(i), "remove_at", function(event) {
-							'.$this->drawingOnEdit['polyline'].'
-						});
-					}
-				}';
+                if (newShape.type==google.maps.drawing.OverlayType.POLYLINE) {
+                    var newShapePaths = newShape.getPaths();
+                    for (var i=0; i<newShapePaths.length; i++) {
+                        google.maps.event.addListener(newShapePaths.getAt(i), "set_at", function(event) {
+                            '.$this->drawingOnEdit['polyline'].'
+                        });
+                        google.maps.event.addListener(newShapePaths.getAt(i), "insert_at", function(event) {
+                            '.$this->drawingOnEdit['polyline'].'
+                        });
+                        google.maps.event.addListener(newShapePaths.getAt(i), "remove_at", function(event) {
+                            '.$this->drawingOnEdit['polyline'].'
+                        });
+                    }
+                }';
                 }
                 if (isset($this->drawingOnEdit['rectangle'])) {
                     $this->output_js_contents .= '
-				if (newShape.type==google.maps.drawing.OverlayType.RECTANGLE) {
-					google.maps.event.addListener(newShape, "bounds_changed", function(event) {
-						'.$this->drawingOnEdit['rectangle'].'
-					});
-				}';
+                if (newShape.type==google.maps.drawing.OverlayType.RECTANGLE) {
+                    google.maps.event.addListener(newShape, "bounds_changed", function(event) {
+                        '.$this->drawingOnEdit['rectangle'].'
+                    });
+                }';
                 }
                 if (isset($this->drawingOnEdit['circle'])) {
                     $this->output_js_contents .= '
-				if (newShape.type==google.maps.drawing.OverlayType.CIRCLE) {
-					google.maps.event.addListener(newShape, "radius_changed", function(event) {
-						'.$this->drawingOnEdit['circle'].'
-					});
-					google.maps.event.addListener(newShape, "center_changed", function(event) {
-						'.$this->drawingOnEdit['circle'].'
-					});
-				}';
+                if (newShape.type==google.maps.drawing.OverlayType.CIRCLE) {
+                    google.maps.event.addListener(newShape, "radius_changed", function(event) {
+                        '.$this->drawingOnEdit['circle'].'
+                    });
+                    google.maps.event.addListener(newShape, "center_changed", function(event) {
+                        '.$this->drawingOnEdit['circle'].'
+                    });
+                }';
                 }
             }
 
             $this->output_js_contents .= '
-			});';
+            });';
         }
 
         if ($this->places) {
@@ -1731,87 +1740,87 @@ class GMaps
 
                 if ($this->is_lat_long($this->placesLocationSW)) {
                     $this->output_js_contents .= 'var placesLocationSW = new google.maps.LatLng('.$this->placesLocationSW.');
-			';
+            ';
                 } else {  // if centering the map on an address
                     $lat_long = $this->get_lat_long_from_address($this->placesLocationSW);
                     $this->output_js_contents .= 'var placesLocationSW = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].');
-			';
+            ';
                 }
 
                 if ($this->is_lat_long($this->placesLocationNE)) {
                     $this->output_js_contents .= 'var placesLocationNE = new google.maps.LatLng('.$this->placesLocationNE.');
-			';
+            ';
                 } else {  // if centering the map on an address
                     $lat_long = $this->get_lat_long_from_address($this->placesLocationNE);
                     $this->output_js_contents .= 'var placesLocationNE = new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].');
-			';
+            ';
                 }
             }
 
             if (($placesLocationSet || $this->placesLocation != "") || count($this->placesTypes) || $this->placesName != "") {
                 $this->output_js_contents .= 'var placesRequest = {
-					';
+                    ';
                 if ($placesLocationSet) {
                     $this->output_js_contents .= 'bounds: new google.maps.LatLngBounds(placesLocationSW, placesLocationNE)
-						';
+                        ';
                 } else {
                     if ($this->placesLocation != "") { // if search based on a center point
                         if ($this->is_lat_long($this->placesLocation)) { // if centering the map on a lat/long
                             $this->output_js_contents .= 'location: new google.maps.LatLng('.$this->placesLocation.')
-						';
+                        ';
                         } else {  // if centering the map on an address
                             $lat_long = $this->get_lat_long_from_address($this->placesLocation);
                             $this->output_js_contents .= 'location: new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')
-						';
+                        ';
                         }
                         $this->output_js_contents .= ',radius: '.$this->placesRadius.'
-						';
+                        ';
                     }
                 }
 
                 if (count($this->placesTypes)) {
                     $this->output_js_contents .= ',types: [\''.implode("','", $this->placesTypes).'\']
-						';
+                        ';
                 }
                 if ($this->placesName != "") {
                     $this->output_js_contents .= ',name : \''.$this->placesName.'\'
-						';
+                        ';
                 }
                 $this->output_js_contents .= '};
 
-				placesService = new google.maps.places.PlacesService('.$this->map_name.');
-				placesService.search(placesRequest, placesCallback);
-				';
+                placesService = new google.maps.places.PlacesService('.$this->map_name.');
+                placesService.search(placesRequest, placesCallback);
+                ';
             }
 
             if ($this->placesAutocompleteInputID != "") {
                 $this->output_js_contents .= 'var autocompleteOptions = {
-					';
+                    ';
                 $autocompleteOptions = '';
                 if ($this->placesAutocompleteBoundSW != "" && $this->placesAutocompleteBoundNE != "") {
                     if ($this->is_lat_long($this->placesAutocompleteBoundSW)) {
                         $autocompleteOptionsSW = 'new google.maps.LatLng('.$this->placesAutocompleteBoundSW.')
-					';
+                    ';
                     } else {  // if centering the map on an address
                         $lat_long = $this->get_lat_long_from_address($this->placesAutocompleteBoundSW);
                         $autocompleteOptionsSW = 'new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')
-					';
+                    ';
                     }
 
                     if ($this->is_lat_long($this->placesAutocompleteBoundNE)) {
                         $autocompleteOptionsNE = 'new google.maps.LatLng('.$this->placesAutocompleteBoundNE.')
-					';
+                    ';
                     } else {  // if centering the map on an address
                         $lat_long = $this->get_lat_long_from_address($this->placesAutocompleteBoundNE);
                         $autocompleteOptionsNE = 'new google.maps.LatLng('.$lat_long[0].', '.$lat_long[1].')
-					';
+                    ';
                     }
                     $autocompleteOptions .= 'bounds: new google.maps.LatLngBounds('.$autocompleteOptionsSW.', '.$autocompleteOptionsNE.')';
                 }
                 if (count($this->placesAutocompleteTypes)) {
                     if ($autocompleteOptions != "") {
                         $autocompleteOptions .= ',
-						 ';
+                         ';
                     }
                     $autocompleteOptions .= 'types: [\''.implode("','", $this->placesAutocompleteTypes).'\']';
                 }
@@ -1819,14 +1828,14 @@ class GMaps
                 $this->output_js_contents .= '}';
 
                 $this->output_js_contents .= '
-				var autocompleteInput = document.getElementById(\''.$this->placesAutocompleteInputID.'\');
+                var autocompleteInput = document.getElementById(\''.$this->placesAutocompleteInputID.'\');
 
-				placesAutocomplete = new google.maps.places.Autocomplete(autocompleteInput, autocompleteOptions);
-				';
+                placesAutocomplete = new google.maps.places.Autocomplete(autocompleteInput, autocompleteOptions);
+                ';
 
                 if ($this->placesAutocompleteBoundsMap) {
                     $this->output_js_contents .= 'placesAutocomplete.bindTo(\'bounds\', map);
-					';
+                    ';
                 }
 
                 if ($this->placesAutocompleteOnChange != "") {
@@ -1846,9 +1855,9 @@ class GMaps
 
                         event = {latLng: place.geometry.location}
 
-						'. $this->placesAutocompleteOnChange .'
-					});
-					';
+                        '. $this->placesAutocompleteOnChange .'
+                    });
+                    ';
                 }
             }
         }
@@ -1856,93 +1865,93 @@ class GMaps
         if ($this->onboundschanged != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "bounds_changed", function(event) {
 
-    			'.$this->onboundschanged.'
-  			});
-			';
+                '.$this->onboundschanged.'
+            });
+            ';
         }
         if ($this->oncenterchanged != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "center_changed", function(event) {
-    			'.$this->oncenterchanged.'
-  			});
-			';
+                '.$this->oncenterchanged.'
+            });
+            ';
         }
         if ($this->onclick != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "click", function(event) {
-    			'.$this->onclick.'
-  			});
-			';
+                '.$this->onclick.'
+            });
+            ';
         }
         if ($this->ondblclick != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "dblclick", function(event) {
-    			'.$this->ondblclick.'
-  			});
-			';
+                '.$this->ondblclick.'
+            });
+            ';
         }
         if ($this->ondrag != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "drag", function(event) {
-    			'.$this->ondrag.'
-  			});
-			';
+                '.$this->ondrag.'
+            });
+            ';
         }
         if ($this->ondragend != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "dragend", function(event) {
-    			'.$this->ondragend.'
-  			});
-			';
+                '.$this->ondragend.'
+            });
+            ';
         }
         if ($this->ondragstart != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "dragstart", function(event) {
-    			'.$this->ondragstart.'
-  			});
-			';
+                '.$this->ondragstart.'
+            });
+            ';
         }
         if ($this->onidle != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "idle", function(event) {
-    			'.$this->onidle.'
-  			});
-			';
+                '.$this->onidle.'
+            });
+            ';
         }
         if ($this->onmousemove != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "mousemove", function(event) {
-    			'.$this->onmousemove.'
-  			});
-			';
+                '.$this->onmousemove.'
+            });
+            ';
         }
         if ($this->onmouseout != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "mouseout", function(event) {
-    			'.$this->onmouseout.'
-  			});
-			';
+                '.$this->onmouseout.'
+            });
+            ';
         }
         if ($this->onmouseover != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "mouseover", function(event) {
-    			'.$this->onmouseover.'
-  			});
-			';
+                '.$this->onmouseover.'
+            });
+            ';
         }
         if ($this->onresize != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "resize", function(event) {
-    			'.$this->onresize.'
-  			});
-			';
+                '.$this->onresize.'
+            });
+            ';
         }
         if ($this->onrightclick != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "rightclick", function(event) {
-    			'.$this->onrightclick.'
-  			});
-			';
+                '.$this->onrightclick.'
+            });
+            ';
         }
         if ($this->ontilesloaded != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "tilesloaded", function(event) {
-    			'.$this->ontilesloaded.'
-  			});
-			';
+                '.$this->ontilesloaded.'
+            });
+            ';
         }
         if ($this->onzoomchanged != "") {
             $this->output_js_contents .= 'google.maps.event.addListener('.$this->map_name.', "zoom_changed", function(event) {
-    			'.$this->onzoomchanged.'
-  			});
-			';
+                '.$this->onzoomchanged.'
+            });
+            ';
         }
 
 
@@ -1957,24 +1966,24 @@ class GMaps
 
         if ($this->cluster) {
             $this->output_js_contents .= '
-			var clusterOptions = {
-				gridSize: '.$this->clusterGridSize;
+            var clusterOptions = {
+                gridSize: '.$this->clusterGridSize;
             if ($this->clusterMaxZoom != "") {
                 $this->output_js_contents .= ',
-				maxZoom: '.$this->clusterMaxZoom;
+                maxZoom: '.$this->clusterMaxZoom;
             }
             if (!$this->clusterZoomOnClick) {
                 $this->output_js_contents .= ',
-				zoomOnClick: false';
+                zoomOnClick: false';
             }
             if ($this->clusterAverageCenter) {
                 $this->output_js_contents .= ',
-				averageCenter: true';
+                averageCenter: true';
             }
             if (count($this->clusterStyles) > 0) {
 
                 $this->output_js_contents .= ',
-				styles: [ ';
+                styles: [ ';
                 $styleOutput = [];
                 foreach($this->clusterStyles as $clusterStyle){
                     $attributes =[];
@@ -1988,10 +1997,10 @@ class GMaps
             }
 
             $this->output_js_contents .= ',
-				minimumClusterSize: '.$this->clusterMinimumClusterSize.'
-			};
-			markerCluster = new MarkerClusterer('.$this->map_name.', markers_'.$this->map_name.', clusterOptions);
-			';
+                minimumClusterSize: '.$this->clusterMinimumClusterSize.'
+            };
+            markerCluster = new MarkerClusterer('.$this->map_name.', markers_'.$this->map_name.', clusterOptions);
+            ';
         }
 
         // add polylines
@@ -2036,92 +2045,92 @@ class GMaps
 
         if ($this->zoom == "auto") {
             $this->output_js_contents .= '
-			fitMapToBounds_'.$this->map_name.'();
-			';
+            fitMapToBounds_'.$this->map_name.'();
+            ';
         }
 
         if ($this->adsense) {
             $this->output_js_contents .= '
-			var adUnitDiv = document.createElement("div");
+            var adUnitDiv = document.createElement("div");
 
-		    // Note: replace the publisher ID noted here with your own
-		    // publisher ID.
-		    var adUnitOptions = {
-		    	format: google.maps.adsense.AdFormat.'.$this->adsenseFormat.',
-		    	position: google.maps.ControlPosition.'.$this->adsensePosition.',
-		    	publisherId: "'.$this->adsensePublisherID.'",
-		    	';
+            // Note: replace the publisher ID noted here with your own
+            // publisher ID.
+            var adUnitOptions = {
+                format: google.maps.adsense.AdFormat.'.$this->adsenseFormat.',
+                position: google.maps.ControlPosition.'.$this->adsensePosition.',
+                publisherId: "'.$this->adsensePublisherID.'",
+                ';
             if ($this->adsenseChannelNumber != "") {
                 $this->output_js_contents .= 'channelNumber: "'.$this->adsenseChannelNumber.'",
-		    	';
+                ';
             }
             $this->output_js_contents .= 'map: '.$this->map_name.',
-		    	visible: true
-		    };
-		    adUnit = new google.maps.adsense.AdUnit(adUnitDiv, adUnitOptions);
-		    ';
+                visible: true
+            };
+            adUnit = new google.maps.adsense.AdUnit(adUnitDiv, adUnitOptions);
+            ';
         }
 
         if ($this->directions && $this->directionsStart != "" && $this->directionsEnd != "") {
             if ($this->directionsStart == "auto" && $this->directionsEnd == "auto") {
                 // Both start and finish are at the users current location
                 $this->output_js_contents .= '
-				// Try W3C Geolocation (Preferred)
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						start = position.coords.latitude+","+position.coords.longitude;
-						calcRoute(start, start);
-					}, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
-				// Browser doesn\'t support Geolocation
-				}else{
-					alert(\'Your browser does not support geolocation.\');
-				}
-				';
+                // Try W3C Geolocation (Preferred)
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        start = position.coords.latitude+","+position.coords.longitude;
+                        calcRoute(start, start);
+                    }, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
+                // Browser doesn\'t support Geolocation
+                }else{
+                    alert(\'Your browser does not support geolocation.\');
+                }
+                ';
             } elseif ($this->directionsStart == "auto") {
                 // The start point should be at the users current location
                 $this->output_js_contents .= '
-				// Try W3C Geolocation (Preferred)
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						start = position.coords.latitude+","+position.coords.longitude;
-						calcRoute(start, \''.$this->directionsEnd.'\');
-					}, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
-				// Browser doesn\'t support Geolocation
-				}else{
-					alert(\'Your browser does not support geolocation.\');
-				}
-				';
+                // Try W3C Geolocation (Preferred)
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        start = position.coords.latitude+","+position.coords.longitude;
+                        calcRoute(start, \''.$this->directionsEnd.'\');
+                    }, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
+                // Browser doesn\'t support Geolocation
+                }else{
+                    alert(\'Your browser does not support geolocation.\');
+                }
+                ';
             } elseif ($this->directionsEnd == "auto") {
                 // The end point should be at the users current location
                 $this->output_js_contents .= '
-				// Try W3C Geolocation (Preferred)
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						end = position.coords.latitude+","+position.coords.longitude;
-						calcRoute(\''.$this->directionsStart.'\', end);
-					}, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
-				// Browser doesn\'t support Geolocation
-				}else{
-					alert(\'Your browser does not support geolocation.\');
-				}
-				';
+                // Try W3C Geolocation (Preferred)
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        end = position.coords.latitude+","+position.coords.longitude;
+                        calcRoute(\''.$this->directionsStart.'\', end);
+                    }, function() { alert("Unable to get your current position. Please try again. Geolocation service failed."); });
+                // Browser doesn\'t support Geolocation
+                }else{
+                    alert(\'Your browser does not support geolocation.\');
+                }
+                ';
             } else {
                 // The start and end point are at pre-defined locations
                 $this->output_js_contents .= '
-				calcRoute(\''.$this->directionsStart.'\', \''.$this->directionsEnd.'\');
-				';
+                calcRoute(\''.$this->directionsStart.'\', \''.$this->directionsEnd.'\');
+                ';
             }
         }
 
         if ($this->onload != "") {
             $this->output_js_contents .= '
-				'.$this->onload;
+                '.$this->onload;
         }
 
         $this->output_js_contents .= '
-			}
+            }
 
-		';
+        ';
 
         /* onStaged map */
         $this->output_js_contents .= '
@@ -2135,23 +2144,23 @@ class GMaps
 
         // add markers
         $this->output_js_contents .= '
-		function createMarker_'.$this->map_name.'(markerOptions) {
-			var marker = new google.maps.Marker(markerOptions);
-			markers_'.$this->map_name.'.push(marker);
-			lat_longs_'.$this->map_name.'.push(marker.getPosition());
-			return marker;
-		}
-		';
+        function createMarker_'.$this->map_name.'(markerOptions) {
+            var marker = new google.maps.Marker(markerOptions);
+            markers_'.$this->map_name.'.push(marker);
+            lat_longs_'.$this->map_name.'.push(marker.getPosition());
+            return marker;
+        }
+        ';
         //
 
         if ($this->directions) {
             $this->output_js_contents .= 'function calcRoute(start, end) {
 
-			var request = {
-			    	origin:start,
-			    	destination:end,
-			    	travelMode: google.maps.TravelMode.'.$this->directionsMode.'
-			    	';
+            var request = {
+                    origin:start,
+                    destination:end,
+                    travelMode: google.maps.TravelMode.'.$this->directionsMode.'
+                    ';
 
             if (count($this->directionsWaypointArray)) {
                 $directionsWaypointStr = '';
@@ -2169,103 +2178,103 @@ class GMaps
             }
             if ($this->region != "" && strlen($this->region) == 2) {
                 $this->output_js_contents .= ',region: '.strtoupper($this->region).'
-					';
+                    ';
             }
             if (trim($this->directionsUnits) != "" && (strtolower(trim($this->directionsUnits)) == "metric" || strtolower(trim($this->directionsUnits)) == "imperial")) {
                 $this->output_js_contents .= ',unitSystem: google.maps.UnitSystem.'.strtoupper(trim($this->directionsUnits)).'
-					';
+                    ';
             }
             if ($this->directionsAvoidTolls) {
                 $this->output_js_contents .= ',avoidTolls: true
-					';
+                    ';
             }
             if ($this->directionsAvoidHighways) {
                 $this->output_js_contents .= ',avoidHighways: true
-					';
+                    ';
             }
 
             $this->output_js_contents .= '
-			};
-			  	directionsService.route(request, function(response, status) {
-			    	if (status == google.maps.DirectionsStatus.OK) {
-			      		directionsDisplay.setDirections(response);
-			    	}else{
-			    		switch (status) {
-			    			case "NOT_FOUND": { alert("Either the start location or destination were not recognised"); break }
-			    			case "ZERO_RESULTS": { alert("No route could be found between the start location and destination"); break }
-			    			case "MAX_WAYPOINTS_EXCEEDED": { alert("Maximum waypoints exceeded. Maximum of 8 allowed"); break }
-			    			case "INVALID_REQUEST": { alert("Invalid request made for obtaining directions"); break }
-			    			case "OVER_QUERY_LIMIT": { alert("This webpage has sent too many requests recently. Please try again later"); break }
-			    			case "REQUEST_DENIED": { alert("This webpage is not allowed to request directions"); break }
-			    			case "UNKNOWN_ERROR": { alert("Unknown error with the server. Please try again later"); break }
-			    		}
-			    	}
-			  	});
-			}
-			';
+            };
+                directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                    }else{
+                        switch (status) {
+                            case "NOT_FOUND": { alert("Either the start location or destination were not recognised"); break }
+                            case "ZERO_RESULTS": { alert("No route could be found between the start location and destination"); break }
+                            case "MAX_WAYPOINTS_EXCEEDED": { alert("Maximum waypoints exceeded. Maximum of 8 allowed"); break }
+                            case "INVALID_REQUEST": { alert("Invalid request made for obtaining directions"); break }
+                            case "OVER_QUERY_LIMIT": { alert("This webpage has sent too many requests recently. Please try again later"); break }
+                            case "REQUEST_DENIED": { alert("This webpage is not allowed to request directions"); break }
+                            case "UNKNOWN_ERROR": { alert("Unknown error with the server. Please try again later"); break }
+                        }
+                    }
+                });
+            }
+            ';
         }
 
         if ($this->places) {
             $this->output_js_contents .= 'function placesCallback(results, status) {
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					for (var i = 0; i < results.length; i++) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
 
-						var place = results[i];
+                        var place = results[i];
 
-						var placeLoc = place.geometry.location;
-						var placePosition = new google.maps.LatLng(placeLoc.lat(), placeLoc.lng());
-						var markerOptions = {
-				 			map: '.$this->map_name.',
-				        	position: placePosition
-				      	};
-				      	var marker = createMarker_'.$this->map_name.'(markerOptions);
-				      	marker.set("content", place.name);
-				      	google.maps.event.addListener(marker, "click", function() {
-				        	iw_'.$this->map_name.'.setContent(this.get("content"));
-				        	iw_'.$this->map_name.'.open('.$this->map_name.', this);
-				      	});
+                        var placeLoc = place.geometry.location;
+                        var placePosition = new google.maps.LatLng(placeLoc.lat(), placeLoc.lng());
+                        var markerOptions = {
+                            map: '.$this->map_name.',
+                            position: placePosition
+                        };
+                        var marker = createMarker_'.$this->map_name.'(markerOptions);
+                        marker.set("content", place.name);
+                        google.maps.event.addListener(marker, "click", function() {
+                            iw_'.$this->map_name.'.setContent(this.get("content"));
+                            iw_'.$this->map_name.'.open('.$this->map_name.', this);
+                        });
 
-				      	lat_longs_'.$this->map_name.'.push(placePosition);
+                        lat_longs_'.$this->map_name.'.push(placePosition);
 
-					}
-					';
+                    }
+                    ';
             if ($this->zoom == "auto") {
                 $this->output_js_contents .= 'fitMapToBounds_'.$this->map_name.'();';
             }
             $this->output_js_contents .= '
-				}
-			}
-			';
+                }
+            }
+            ';
         }
 
         if ($this->zoom == "auto") {
             $this->output_js_contents .= '
-			function fitMapToBounds_'.$this->map_name.'() {
-				var bounds = new google.maps.LatLngBounds();
-				if (lat_longs_'.$this->map_name.'.length>0) {
-					for (var i=0; i<lat_longs_'.$this->map_name.'.length; i++) {
-						bounds.extend(lat_longs_'.$this->map_name.'[i]);
-					}
-					'.$this->map_name.'.fitBounds(bounds);
-				}
-			}
-			';
+            function fitMapToBounds_'.$this->map_name.'() {
+                var bounds = new google.maps.LatLngBounds();
+                if (lat_longs_'.$this->map_name.'.length>0) {
+                    for (var i=0; i<lat_longs_'.$this->map_name.'.length; i++) {
+                        bounds.extend(lat_longs_'.$this->map_name.'[i]);
+                    }
+                    '.$this->map_name.'.fitBounds(bounds);
+                }
+            }
+            ';
         }
 
         if ($this->loadAsynchronously) {
             $this->output_js_contents .= '
-			function loadScript_'.$this->map_name.'() {
-				var script = document.createElement("script");
-  				script.type = "text/javascript";
-  				script.src = "'.$apiLocation.'&callback=initialize_'.$this->map_name.'";
-  				document.body.appendChild(script);
-			}
-			window.onload = loadScript_'.$this->map_name.';
-			';
+            function loadScript_'.$this->map_name.'() {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = "'.$apiLocation.'&callback=initialize_'.$this->map_name.'";
+                document.body.appendChild(script);
+            }
+            window.onload = loadScript_'.$this->map_name.';
+            ';
         } else {
             $this->output_js_contents .= '
-			google.maps.event.addDomListener(window, "load", initialize_'.$this->map_name.');
-			';
+            google.maps.event.addDomListener(window, "load", initialize_'.$this->map_name.');
+            ';
         }
 
         /* Geocoding reverse method */
@@ -2306,15 +2315,15 @@ class GMaps
                     $this->output_js .= $this->output_js_contents;
                 } else {
                     $this->output_js .= '
-					<script src="'.$this->jsfile.'" type="text/javascript"></script>';
+                    <script src="'.$this->jsfile.'" type="text/javascript"></script>';
                 }
             }
         }
 
         if ($this->jsfile == "") {
             $this->output_js .= '
-			//]]>
-			</script>';
+            //]]>
+            </script>';
         }
 
         // set height and width
@@ -2364,7 +2373,8 @@ class GMaps
                 return array($geocache->latitude, $geocache->longitude);
             }
         }
-        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor."&key=".$this->apiKey;
+
+        $data_location = "https://maps.google.com/maps/api/geocode/json?key=".$this->apiKey."&address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor;
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
