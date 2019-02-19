@@ -43,7 +43,6 @@ class GMapsServiceProvider extends ServiceProvider
         $this->app->bind('GMaps', function ($app) {
             return new GMaps();
         });
-
     }
 
     /**

@@ -12,7 +12,7 @@
 */
 Route::get('/map', 'MapController@index');
 
-Route::get('/', function(){
+Route::get('/', function () {
     $config = array();
     $config['center'] = 'Defence Garden, Karachi';
     GMaps::initialize($config);

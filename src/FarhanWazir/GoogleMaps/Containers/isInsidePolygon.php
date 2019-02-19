@@ -1,4 +1,5 @@
 <?php namespace FarhanWazir\GoogleMaps\Containers;
+
 /*
 Description: The point-in-polygon algorithm allows you to check if a point is
 inside a polygon or outside of it.
@@ -6,23 +7,27 @@ Author: Michaël Niessen (2009)
 Website: http://AssemblySys.com
 
 Tutorial URL::: http://assemblysys.com/php-point-in-polygon-algorithm
- 
+
 If you find this script useful, you can show your
 appreciation by getting Michaël a cup of coffee ;)
 PayPal: michael.niessen@assemblysys.com
- 
+
 As long as this notice (including author name and details) is included and
 UNALTERED, this code is licensed under the GNU General Public License version 3:
 http://www.gnu.org/licenses/gpl.html
 */
 
-class isInsidePolygon {
-    var $pointOnVertex = true; // Check if the point sits exactly on one of the vertices?
+class isInsidePolygon
+{
+    public $pointOnVertex = true; // Check if the point sits exactly on one of the vertices?
 
     //Constructor
-    function isInsidePolygon() {}
+    public function isInsidePolygon()
+    {
+    }
 
-    function pointInPolygon($point, $polygon, $pointOnVertex = true) {
+    public function pointInPolygon($point, $polygon, $pointOnVertex = true)
+    {
         $this->pointOnVertex = $pointOnVertex;
 
         // Transform string coordinates into arrays with x and y values
@@ -57,7 +62,7 @@ class isInsidePolygon {
                 }
             }
         }
-        // If the number of edges we passed through is odd, then it's in the polygon. 
+        // If the number of edges we passed through is odd, then it's in the polygon.
         if ($intersections % 2 != 0) {
             return true; //return "inside"; //point is inside
         }
@@ -65,19 +70,24 @@ class isInsidePolygon {
         return false; //return "outside"; //point is outside
     }
 
-    private function pointOnVertex($point, $vertices) {
-        foreach($vertices as $vertex) {
+    private function pointOnVertex($point, $vertices)
+    {
+        foreach ($vertices as $vertex) {
             if ($point == $vertex) {
                 return true;
             }
         }
     }
 
-    private function pointStringToCoordinates($pointString) {
-        if(strpos($pointString, ", ") !== false) $coordinates = explode(", ", $pointString);
-        elseif(strpos($pointString, ",") !== false) $coordinates = explode(", ", $pointString);
-        else $coordinates = explode(" ", $pointString);
+    private function pointStringToCoordinates($pointString)
+    {
+        if (strpos($pointString, ", ") !== false) {
+            $coordinates = explode(", ", $pointString);
+        } elseif (strpos($pointString, ",") !== false) {
+            $coordinates = explode(", ", $pointString);
+        } else {
+            $coordinates = explode(" ", $pointString);
+        }
         return array("x" => $coordinates[0], "y" => $coordinates[1]);
     }
-
 }

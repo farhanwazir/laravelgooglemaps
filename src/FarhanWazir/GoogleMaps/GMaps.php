@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\DB;
 
 class GMaps
 {
-
     protected $output_js;
     protected $output_js_contents;
     protected $output_html;
@@ -152,6 +151,8 @@ class GMaps
     public $placesAutocompleteBoundsMap = false;                    // An alternative to setting the SW and NE bounds is to use the bounds of the current viewport. If set to TRUE, the bounds will be set to the viewport of the visible map, even if dragged or zoomed
     public $placesAutocompleteOnChange = '';                        // The JavaScript action to perform when a place is selected
     public $palcesAutoCompleteOnChangeFailed = '';
+
+    public $geometry = false;
 
     public $injectControlsInTopLeft = array();
     public $injectControlsInTopRight = array();
@@ -1103,7 +1104,7 @@ class GMaps
         $this->output_html = '';
 
         $host = 'https';
-        if(empty($_SERVER['HTTPS'])){
+        if (empty($_SERVER['HTTPS'])) {
             $host = 'http';
         }
 
@@ -1129,6 +1130,9 @@ class GMaps
             }
             if ($this->places != "") {
                 array_push($libraries, 'places');
+            }
+            if ($this->geometry != "") {
+                array_push($libraries, 'geometry');
             }
             if ($this->panoramio) {
                 array_push($libraries, 'panoramio');
@@ -1300,9 +1304,9 @@ class GMaps
         }
         //Added for full screen control
          if ($this->enableFullScreenControl) {
-            $this->output_js_contents .= ',
+             $this->output_js_contents .= ',
                     fullscreenControl: true';
-        }
+         }
         if ($this->disableDoubleClickZoom) {
             $this->output_js_contents .= ',
                     disableDoubleClickZoom: true';
@@ -1409,57 +1413,57 @@ class GMaps
         $this->output_js_contents .=$this->map_name.' = new google.maps.Map(document.getElementById("'.$this->map_div_id.'"), myOptions);';
 
         /* Map Custom Controls */
-        foreach($this->injectControlsInTopLeft as $customControl){
+        foreach ($this->injectControlsInTopLeft as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_LEFT].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInTopCenter as $customControl){
+        foreach ($this->injectControlsInTopCenter as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_CENTER].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInTopRight as $customControl){
+        foreach ($this->injectControlsInTopRight as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.TOP_RIGHT].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInLeftTop as $customControl){
+        foreach ($this->injectControlsInLeftTop as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_TOP].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInLeftCenter as $customControl){
+        foreach ($this->injectControlsInLeftCenter as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_CENTER].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInLeftBottom as $customControl){
+        foreach ($this->injectControlsInLeftBottom as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.LEFT_BOTTOM].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInBottomLeft as $customControl){
+        foreach ($this->injectControlsInBottomLeft as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_LEFT].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInBottomCenter as $customControl){
+        foreach ($this->injectControlsInBottomCenter as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_CENTER].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInBottomRight as $customControl){
+        foreach ($this->injectControlsInBottomRight as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInRightTop as $customControl){
+        foreach ($this->injectControlsInRightTop as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_TOP].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInRightCenter as $customControl){
+        foreach ($this->injectControlsInRightCenter as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_CENTER].push('. $customControl .');';
         }
 
-        foreach($this->injectControlsInRightBottom as $customControl){
+        foreach ($this->injectControlsInRightBottom as $customControl) {
             $this->output_js_contents .= $this->map_name.'.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push('. $customControl .');';
         }
         /* End Map Custom Controls */
 
         /* map on staged event */
-        if($this->onstaged != ''){
+        if ($this->onstaged != '') {
             $this->output_js_contents .= '
             //user callback
                 onstaged_'. $this->map_name .'();
@@ -1977,18 +1981,17 @@ class GMaps
                 averageCenter: true';
             }
             if (count($this->clusterStyles) > 0) {
-
                 $this->output_js_contents .= ',
                 styles: [ ';
                 $styleOutput = [];
-                foreach($this->clusterStyles as $clusterStyle){
+                foreach ($this->clusterStyles as $clusterStyle) {
                     $attributes =[];
-                    foreach($clusterStyle as $key => $style){
+                    foreach ($clusterStyle as $key => $style) {
                         $attributes[] = $key.':"'.$style.'"';
                     }
-                    $styleOutput[] = '{'.implode(',',$attributes).'}';
+                    $styleOutput[] = '{'.implode(',', $attributes).'}';
                 }
-                $this->output_js_contents .= implode(',',$styleOutput);
+                $this->output_js_contents .= implode(',', $styleOutput);
                 $this->output_js_contents .= ']';
             }
 
@@ -2132,8 +2135,9 @@ class GMaps
         $this->output_js_contents .= '
         function onstaged_'. $this->map_name .'(){';
 
-        if($this->onstaged != '')
+        if ($this->onstaged != '') {
             $this->output_js_contents .= $this->onstaged.'();';
+        }
 
         $this->output_js_contents .= '}
         ';
@@ -2362,15 +2366,14 @@ class GMaps
 
         if ($this->geocodeCaching) { // if caching of geocode requests is activated
 
-            $geocache = DB::table($this->geoCacheTableName)->select("latitude","longitude")->where("address", trim(strtolower($address)))->first();
+            $geocache = DB::table($this->geoCacheTableName)->select("latitude", "longitude")->where("address", trim(strtolower($address)))->first();
 
             if ($geocache) {
-
                 return array($geocache->latitude, $geocache->longitude);
             }
         }
 
-        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor;
+        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor."&key=".$this->apiKey;
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
@@ -2430,16 +2433,18 @@ class GMaps
      * $latlngs = array("50,70","70,40","-20,30","100,10","-10,-10","40,-20","110,-20");
      * $polygon = array("-50,30","50,70","100,50","80,10","110,-10","110,-30","-20,-50","-30,-40","10,-10","-10,10","-30,-20","-50,30");
      */
-    public function isMarkerInsideGeofence($polygon, $latlngs){
+    public function isMarkerInsideGeofence($polygon, $latlngs)
+    {
         $cls = new isInsidePolygon();
         $output = [];
-        foreach($latlngs as $key => $point) {
+        foreach ($latlngs as $key => $point) {
             $output[$key] = $cls->pointInPolygon($point, $polygon);
         }
         return $output;
     }
 
-    public function getMapName(){
+    public function getMapName()
+    {
         return $this->map_name;
     }
 }

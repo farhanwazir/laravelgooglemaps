@@ -9,14 +9,15 @@ use App\Http\Requests;
 
 class MapController extends Controller
 {
-
     protected $gmap;
 
-    public function __construct(GMaps $gmap){
+    public function __construct(GMaps $gmap)
+    {
         $this->gmap = $gmap;
     }
 
-    public function index(){
+    public function index()
+    {
 
         /******** Custom Map Controls ********/
 
