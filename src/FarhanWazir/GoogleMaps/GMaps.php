@@ -2370,7 +2370,7 @@ class GMaps
             }
         }
 
-        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor;
+        $data_location = "https://maps.google.com/maps/api/geocode/json?address=".urlencode(utf8_encode($address))."&sensor=".$this->sensor."&key=".$this->apiKey;
         if ($this->region != "" && strlen($this->region) == 2) {
             $data_location .= "&region=".$this->region;
         }
